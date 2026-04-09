@@ -64,18 +64,3 @@ See the [Getting Started](GettingStarted.md) file for more information.
 OpenNutriTracker is not a medical application. All data provided is not validated and should be used with caution. Please maintain a healthy lifestyle and consult a professional if you have any problems. Use during illness, pregnancy or lactation is not recommended.
 
 The application is still under construction. Errors, bugs and crashes might occur.
-
-## Acknowledgments
-The OpenNutriTracker project was inspired by the need for a simple and effective nutrition tracking tool.
-The food database used in OpenNutriTracker is powered by [Open Food Facts](https://world.openfoodfacts.org/) and [Food Data Central](https://fdc.nal.usda.gov/).
-
-## License
-This project is licensed under the GNU General Public License v3.0 License. See the [LICENSE](LICENSE) file for more information.
-
-## Contact
-For questions, suggestions, or collaborations, feel free to contact the project maintainer:
-
-Simon Oppowa
-
-- GitHub: [@simonoppowa](https://github.com/simonoppowa)
-- Email: [opennutritracker-dev@pm.me](mailto:opennutritracker-dev@pm.me)
