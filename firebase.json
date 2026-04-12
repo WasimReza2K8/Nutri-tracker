@@ -1,0 +1,44 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "platelogic-7ef43",
+          "appId": "1:994967884112:android:a4032b06b931db65475c55",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "platelogic-7ef43",
+          "appId": "1:994967884112:ios:a8670db5d72527b2475c55",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "platelogic-7ef43",
+          "configurations": {
+            "android": "1:994967884112:android:a4032b06b931db65475c55",
+            "ios": "1:994967884112:ios:a8670db5d72527b2475c55"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "codebase": "default",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "source": "functions"
+    }
+  ]
+}
