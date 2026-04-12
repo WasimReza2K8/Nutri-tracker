@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "994967884112",
+    "project_id": "platelogic-7ef43",
+    "storage_bucket": "platelogic-7ef43.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994967884112:android:a4032b06b931db65475c55",
+        "android_client_info": {
+          "package_name": "com.codeartist.platelogic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMTnP5Nz1eGzbu4p_TyqoxlTPy2amyTB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994967884112:android:ee658184ea94c132475c55",
+        "android_client_info": {
+          "package_name": "com.opennutritracker.ont.opennutritracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMTnP5Nz1eGzbu4p_TyqoxlTPy2amyTB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
