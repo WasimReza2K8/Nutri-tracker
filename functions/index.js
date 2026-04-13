@@ -1,21 +1,20 @@
-const { onRequest } = require("firebase-functions/https");
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { defineSecret } = require("firebase-functions/params");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Define the secret
 const GEMINI_API_KEY = defineSecret("GEMINI_API_KEY");
 
-exports.getNutriInfoFromText = onRequest({
+exports.getNutriInfoFromText = onCall({
   secrets: [GEMINI_API_KEY],
   region: "europe-west3",
-  cors: true,
-}, async (req, res) => {
+}, async (request) => {
 
-  // 1. Get the user message from the URL (e.g., ?text=1 apple)
-  const userMessage = req.query.text;
+  // 1. Get the user message from the data payload
+  const userMessage = request.data.text;
 
   if (!userMessage) {
-    return res.status(400).send({ error: "Please provide text in the URL. Example: ?text=1 apple" });
+    throw new HttpsError("invalid-argument", "Please provide text in the 'text' field.");
   }
 
   // 2. Your internal, hidden prompt
@@ -40,34 +39,26 @@ exports.getNutriInfoFromText = onRequest({
     const result = await model.generateContent([internalPrompt, userMessage]);
     const responseText = result.response.text();
 
-    // 3. Parse the string into a real JSON object and send it back
-    const nutritionData = JSON.parse(responseText);
-
-    return res.status(200).send(nutritionData);
+    // 3. Parse the string into a real JSON object and return it
+    return JSON.parse(responseText);
 
   } catch (error) {
     console.error("Gemini Error:", error);
-    return res.status(500).send({ error: "AI failed to generate nutrition data." });
+    throw new HttpsError("internal", "AI failed to generate nutrition data.");
   }
 });
 
 
-exports.estimateCaloriesFromImage = onRequest({
+exports.estimateCaloriesFromImage = onCall({
   secrets: [GEMINI_API_KEY],
   region: "europe-west3",
-  cors: true,
-}, async (req, res) => {
+}, async (request) => {
 
-  // 1. Ensure it's a POST request
-  if (req.method !== "POST") {
-    return res.status(405).send({ error: "Only POST allowed (Send image in body)" });
-  }
-
-  // 2. Expecting base64 string and mimeType in the body
-  const { base64Image, mimeType } = req.body;
+  // 1. Expecting base64 string and mimeType in the data payload
+  const { base64Image, mimeType } = request.data;
 
   if (!base64Image) {
-    return res.status(400).send({ error: "No image data provided (base64Image required)." });
+    throw new HttpsError("invalid-argument", "No image data provided (base64Image required).");
   }
 
   const internalPrompt = `
@@ -86,7 +77,7 @@ exports.estimateCaloriesFromImage = onRequest({
       generationConfig: { responseMimeType: "application/json" }
     });
 
-    // 3. Prepare image for Gemini
+    // 2. Prepare image for Gemini
     const imageParts = [
       {
         inlineData: {
@@ -99,11 +90,10 @@ exports.estimateCaloriesFromImage = onRequest({
     const result = await model.generateContent([internalPrompt, ...imageParts]);
     const responseText = result.response.text();
 
-    return res.status(200).send(JSON.parse(responseText));
+    return JSON.parse(responseText);
 
   } catch (error) {
     console.error("Vision Error:", error);
-    return res.status(500).send({ error: "AI failed to analyze image." });
+    throw new HttpsError("internal", "AI failed to analyze image.");
   }
 });
-
