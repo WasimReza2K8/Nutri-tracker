@@ -53,11 +53,14 @@ class OFFConst {
 
   static String _getReturnFields() => _returnFields.join(",");
 
-  static Uri getOffWordSearchUrl(String searchString) {
+  static const _offCountryCodeTag = "cc";
+
+  static Uri getOffWordSearchUrl(String searchString, {String? countryCode}) {
     final queryParameters = {
       _offProductSearchTermsTag: searchString,
       _offFieldsTag: _getReturnFields(),
       _offJsonTag: _offJsonValue,
+      if (countryCode != null) _offCountryCodeTag: countryCode,
     };
 
     return Uri.https(_offBaseUrl, _offSearchTag, queryParameters);

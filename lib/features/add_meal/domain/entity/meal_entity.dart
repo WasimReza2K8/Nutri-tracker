@@ -8,6 +8,7 @@ import 'package:opennutritracker/features/add_meal/data/dto/fdc/fdc_const.dart';
 import 'package:opennutritracker/features/add_meal/data/dto/fdc/fdc_food_dto.dart';
 import 'package:opennutritracker/features/add_meal/data/dto/fdc_sp/sp_fdc_food_dto.dart';
 import 'package:opennutritracker/features/add_meal/data/dto/off/off_product_dto.dart';
+import 'package:opennutritracker/features/add_meal/data/dto/search_food/search_food_item_dto.dart';
 import 'package:opennutritracker/features/add_meal/domain/entity/meal_nutriments_entity.dart';
 
 class MealEntity extends Equatable {
@@ -143,6 +144,38 @@ class MealEntity extends Equatable {
             "${(foodItem.servingAmount ?? 1).toInt()} ${foodItem.servingSizeUnit}",
         nutriments: MealNutrimentsEntity.fromFDCNutriments(foodItem.nutrients),
         source: MealSourceEntity.fdc);
+  }
+
+  factory MealEntity.fromSearchFoodItem(SearchFoodItemDTO item) {
+    final quantityG = item.quantityG;
+    final hasQuantity = quantityG > 0;
+
+    double toPer100(double value) =>
+        hasQuantity ? (value / quantityG) * 100 : value;
+
+    return MealEntity(
+      code: IdGenerator.getUniqueID(),
+      name: item.foodName,
+      brands: null,
+      thumbnailImageUrl: null,
+      mainImageUrl: null,
+      url: null,
+      mealQuantity: hasQuantity ? quantityG.toStringAsFixed(0) : null,
+      mealUnit: 'g',
+      servingQuantity: hasQuantity ? quantityG : null,
+      servingUnit: 'g',
+      servingSize: hasQuantity ? '${quantityG.toStringAsFixed(0)} g' : null,
+      nutriments: MealNutrimentsEntity(
+        energyKcal100: toPer100(item.calories),
+        carbohydrates100: toPer100(item.carbsG),
+        fat100: toPer100(item.fatG),
+        proteins100: toPer100(item.proteinG),
+        sugars100: null,
+        saturatedFat100: null,
+        fiber100: null,
+      ),
+      source: MealSourceEntity.custom,
+    );
   }
 
   /// Value returned from OFF can either be String, int or double.

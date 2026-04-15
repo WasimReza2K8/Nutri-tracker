@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -16,7 +17,11 @@ class OFFDataSource {
 
   Future<OFFWordResponseDTO> fetchSearchWordResults(String searchString) async {
     try {
-      final searchUrlString = OFFConst.getOffWordSearchUrl(searchString);
+      final localeParts = Platform.localeName.split('_');
+      final countryCode =
+          localeParts.length > 1 ? localeParts[1].toLowerCase() : null;
+      final searchUrlString = OFFConst.getOffWordSearchUrl(searchString,
+          countryCode: countryCode);
       final userAgentString = await AppConst.getUserAgentString();
       final httpClient = ONTHttpClient(userAgentString, http.Client());
 

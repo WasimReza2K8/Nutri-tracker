@@ -22,3 +22,12 @@ class RefreshProductsEvent extends ProductsEvent {
   @override
   List<Object?> get props => [];
 }
+
+class LoadFoodSearchProductsEvent extends ProductsEvent {
+  final String searchString;
+
+  const LoadFoodSearchProductsEvent({required this.searchString});
+
+  @override
+  List<Object?> get props => [searchString];
+}

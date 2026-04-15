@@ -37,8 +37,10 @@ import 'package:opennutritracker/features/add_activity/presentation/bloc/activit
 import 'package:opennutritracker/features/add_activity/presentation/bloc/recent_activities_bloc.dart';
 import 'package:opennutritracker/features/add_meal/data/data_sources/fdc_data_source.dart';
 import 'package:opennutritracker/features/add_meal/data/data_sources/off_data_source.dart';
+import 'package:opennutritracker/features/add_meal/data/data_sources/search_food_data_source.dart';
 import 'package:opennutritracker/features/add_meal/data/data_sources/sp_fdc_data_source.dart';
 import 'package:opennutritracker/features/add_meal/data/repository/products_repository.dart';
+import 'package:opennutritracker/features/add_meal/domain/usecase/search_food_usecase.dart';
 import 'package:opennutritracker/features/add_meal/domain/usecase/search_products_usecase.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/add_meal_bloc.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/food_bloc.dart';
@@ -110,8 +112,8 @@ Future<void> initLocator() async {
   locator.registerFactory<ScannerBloc>(() => ScannerBloc(locator(), locator()));
   locator.registerFactory<EditMealBloc>(() => EditMealBloc(locator()));
   locator.registerFactory<AddMealBloc>(() => AddMealBloc(locator()));
-  locator
-      .registerFactory<ProductsBloc>(() => ProductsBloc(locator(), locator()));
+  locator.registerFactory<ProductsBloc>(
+      () => ProductsBloc(locator(), locator(), locator()));
   locator.registerFactory<FoodBloc>(() => FoodBloc(locator(), locator()));
   locator.registerFactory(() => RecentMealBloc(locator(), locator()));
 
@@ -126,6 +128,8 @@ Future<void> initLocator() async {
       .registerLazySingleton<AddUserUsecase>(() => AddUserUsecase(locator()));
   locator.registerLazySingleton<SearchProductsUseCase>(
       () => SearchProductsUseCase(locator()));
+  locator.registerLazySingleton<SearchFoodUseCase>(
+      () => SearchFoodUseCase(locator()));
   locator.registerLazySingleton<SearchProductByBarcodeUseCase>(
       () => SearchProductByBarcodeUseCase(locator()));
   locator.registerLazySingleton<GetIntakeUsecase>(
@@ -163,7 +167,7 @@ Future<void> initLocator() async {
   locator.registerLazySingleton<IntakeRepository>(
       () => IntakeRepository(locator()));
   locator.registerLazySingleton<ProductsRepository>(
-      () => ProductsRepository(locator(), locator(), locator()));
+      () => ProductsRepository(locator(), locator(), locator(), locator()));
   locator.registerLazySingleton<UserActivityRepository>(
       () => UserActivityRepository(locator()));
   locator.registerLazySingleton<PhysicalActivityRepository>(
@@ -185,6 +189,8 @@ Future<void> initLocator() async {
   locator.registerLazySingleton<OFFDataSource>(() => OFFDataSource());
   locator.registerLazySingleton<FDCDataSource>(() => FDCDataSource());
   locator.registerLazySingleton<SpFdcDataSource>(() => SpFdcDataSource());
+  locator.registerLazySingleton<SearchFoodDataSource>(
+      () => SearchFoodDataSource());
   locator.registerLazySingleton(
       () => TrackedDayDataSource(hiveDBProvider.trackedDayBox));
 
