@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:opennutritracker/core/domain/entity/intake_entity.dart';
 import 'package:opennutritracker/core/domain/entity/tracked_day_entity.dart';
 import 'package:opennutritracker/core/domain/entity/user_activity_entity.dart';
 import 'package:opennutritracker/core/presentation/widgets/activity_vertial_list.dart';
-import 'package:opennutritracker/core/presentation/widgets/copy_or_delete_dialog.dart';
 import 'package:opennutritracker/core/presentation/widgets/copy_dialog.dart';
+import 'package:opennutritracker/core/presentation/widgets/copy_or_delete_dialog.dart';
 import 'package:opennutritracker/core/presentation/widgets/delete_dialog.dart';
 import 'package:opennutritracker/core/utils/custom_icons.dart';
 import 'package:opennutritracker/features/add_meal/presentation/add_meal_type.dart';
@@ -53,11 +52,11 @@ class DayInfoWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
+    /*    Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(DateFormat.yMMMMEEEEd().format(selectedDay),
               style: Theme.of(context).textTheme.headlineSmall),
-        ),
+        ),*/
         const SizedBox(height: 8.0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +71,7 @@ class DayInfoWidget extends StatelessWidget {
                                 .onSurface.withValues(alpha: 0.7))),
                   )
                 : const SizedBox(),
-            trackedDay != null
+           /* trackedDay != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
@@ -112,7 +111,7 @@ class DayInfoWidget extends StatelessWidget {
                       ],
                     ),
                   )
-                : const SizedBox(),
+                : const SizedBox(),*/
             const SizedBox(height: 8.0),
             ActivityVerticalList(
                 day: selectedDay,

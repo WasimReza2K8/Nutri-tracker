@@ -26,53 +26,87 @@ class DiaryTableCalendar extends StatefulWidget {
 }
 
 class _DiaryTableCalendarState extends State<DiaryTableCalendar> {
+  CalendarFormat _calendarFormat = CalendarFormat.week;
+
   @override
   Widget build(BuildContext context) {
-    return TableCalendar(
-      headerStyle:
-          const HeaderStyle(titleCentered: true, formatButtonVisible: false),
-      focusedDay: widget.focusedDate,
-      firstDay: widget.currentDate.subtract(widget.calendarDurationDays),
-      lastDay: widget.currentDate.add(widget.calendarDurationDays),
-      startingDayOfWeek: StartingDayOfWeek.monday,
-      onDaySelected: (selectedDay, focusedDay) {
-        widget.onDateSelected(selectedDay, widget.trackedDaysMap);
-      },
-      calendarStyle: CalendarStyle(
-          markersMaxCount: 1,
-          todayTextStyle:
-              Theme.of(context).textTheme.bodyMedium ?? const TextStyle(),
-          todayDecoration: BoxDecoration(
+    return Column(
+      children: [
+        TableCalendar(
+          calendarFormat: _calendarFormat,
+          availableCalendarFormats: const {
+            CalendarFormat.month: 'Month',
+            CalendarFormat.week: 'Week',
+          },
+          onFormatChanged: (format) {
+            setState(() {
+              _calendarFormat = format;
+            });
+          },
+          headerStyle: HeaderStyle(
+            titleCentered: true,
+            formatButtonVisible: true,
+            formatButtonShowsNext: false,
+            formatButtonDecoration: BoxDecoration(
               border: Border.all(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  width: 2.0),
-              shape: BoxShape.circle),
-          selectedTextStyle: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.onPrimary) ??
-              const TextStyle(),
-          selectedDecoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            formatButtonTextStyle: TextStyle(
               color: Theme.of(context).colorScheme.primary,
-              shape: BoxShape.circle)),
-      selectedDayPredicate: (day) => isSameDay(widget.selectedDate, day),
-      calendarBuilders:
-          CalendarBuilders(markerBuilder: (context, date, events) {
-        final trackedDay = widget.trackedDaysMap[date.toParsedDay()];
-        if (trackedDay != null) {
-          return Container(
-            margin: const EdgeInsets.only(top: 10),
-            padding: const EdgeInsets.all(1),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: trackedDay.getCalendarDayRatingColor(context)),
-            width: 5.0,
-            height: 5.0,
-          );
-        } else {
-          return const SizedBox();
-        }
-      }),
+              fontSize: 12,
+            ),
+          ),
+          focusedDay: widget.focusedDate,
+          firstDay:
+              widget.currentDate.subtract(widget.calendarDurationDays),
+          lastDay: widget.currentDate.add(widget.calendarDurationDays),
+          startingDayOfWeek: StartingDayOfWeek.monday,
+          onDaySelected: (selectedDay, focusedDay) {
+            widget.onDateSelected(selectedDay, widget.trackedDaysMap);
+          },
+          calendarStyle: CalendarStyle(
+              markersMaxCount: 1,
+              todayTextStyle: Theme.of(context).textTheme.bodyMedium ??
+                  const TextStyle(),
+              todayDecoration: BoxDecoration(
+                  border: Border.all(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      width: 2.0),
+                  shape: BoxShape.circle),
+              selectedTextStyle: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(
+                          color:
+                              Theme.of(context).colorScheme.onPrimary) ??
+                  const TextStyle(),
+              selectedDecoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  shape: BoxShape.circle)),
+          selectedDayPredicate: (day) =>
+              isSameDay(widget.selectedDate, day),
+          calendarBuilders:
+              CalendarBuilders(markerBuilder: (context, date, events) {
+            final trackedDay =
+                widget.trackedDaysMap[date.toParsedDay()];
+            if (trackedDay != null) {
+              return Container(
+                margin: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.all(1),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        trackedDay.getCalendarDayRatingColor(context)),
+                width: 5.0,
+                height: 5.0,
+              );
+            } else {
+              return const SizedBox();
+            }
+          }),
+        ),
+      ],
     );
   }
 }

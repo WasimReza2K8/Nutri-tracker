@@ -11,6 +11,7 @@ import 'package:opennutritracker/features/diary/presentation/bloc/calendar_day_b
 import 'package:opennutritracker/features/diary/presentation/bloc/diary_bloc.dart';
 import 'package:opennutritracker/features/diary/presentation/widgets/diary_table_calendar.dart';
 import 'package:opennutritracker/features/diary/presentation/widgets/day_info_widget.dart';
+import 'package:opennutritracker/features/home/presentation/widgets/dashboard_widget.dart';
 import 'package:opennutritracker/features/meal_detail/presentation/bloc/meal_detail_bloc.dart';
 import 'package:opennutritracker/generated/l10n.dart';
 
@@ -90,7 +91,7 @@ class _DiaryPageState extends State<DiaryPage> with WidgetsBindingObserver {
           selectedDate: _selectedDate,
           focusedDate: _focusedDate,
         ),
-        const SizedBox(height: 16.0),
+        const SizedBox(height: 8.0),
         BlocBuilder<CalendarDayBloc, CalendarDayState>(
           bloc: _calendarDayBloc,
           builder: (context, state) {
@@ -99,19 +100,35 @@ class _DiaryPageState extends State<DiaryPage> with WidgetsBindingObserver {
             } else if (state is CalendarDayLoading) {
               return _getLoadingContent();
             } else if (state is CalendarDayLoaded) {
-              return DayInfoWidget(
-                trackedDayEntity: state.trackedDayEntity,
-                selectedDay: _selectedDate,
-                userActivities: state.userActivityList,
-                breakfastIntake: state.breakfastIntakeList,
-                lunchIntake: state.lunchIntakeList,
-                dinnerIntake: state.dinnerIntakeList,
-                snackIntake: state.snackIntakeList,
-                onDeleteIntake: _onDeleteIntakeItem,
-                onDeleteActivity: _onDeleteActivityItem,
-                onCopyIntake: _onCopyIntakeItem,
-                onCopyActivity: _onCopyActivityItem,
-                usesImperialUnits: usesImperialUnits,
+              return Column(
+                children: [
+                  DashboardWidget(
+                    totalKcalDaily: state.totalKcalGoal,
+                    totalKcalLeft: state.totalKcalLeft,
+                    totalKcalSupplied: state.totalKcalSupplied,
+                    totalKcalBurned: state.totalKcalBurned,
+                    totalCarbsIntake: state.totalCarbsIntake,
+                    totalFatsIntake: state.totalFatsIntake,
+                    totalProteinsIntake: state.totalProteinsIntake,
+                    totalCarbsGoal: state.totalCarbsGoal,
+                    totalFatsGoal: state.totalFatsGoal,
+                    totalProteinsGoal: state.totalProteinsGoal,
+                  ),
+                  DayInfoWidget(
+                    trackedDayEntity: state.trackedDayEntity,
+                    selectedDay: _selectedDate,
+                    userActivities: state.userActivityList,
+                    breakfastIntake: state.breakfastIntakeList,
+                    lunchIntake: state.lunchIntakeList,
+                    dinnerIntake: state.dinnerIntakeList,
+                    snackIntake: state.snackIntakeList,
+                    onDeleteIntake: _onDeleteIntakeItem,
+                    onDeleteActivity: _onDeleteActivityItem,
+                    onCopyIntake: _onCopyIntakeItem,
+                    onCopyActivity: _onCopyActivityItem,
+                    usesImperialUnits: usesImperialUnits,
+                  ),
+                ],
               );
             }
             return const SizedBox();

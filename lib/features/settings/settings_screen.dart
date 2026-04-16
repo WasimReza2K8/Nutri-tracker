@@ -21,7 +21,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:opennutritracker/features/settings/presentation/widgets/calculations_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final bool embedded;
+  const SettingsScreen({super.key, this.embedded = false});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -46,11 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).settingsLabel),
-      ),
-      body: BlocBuilder<SettingsBloc, SettingsState>(
+    final body = BlocBuilder<SettingsBloc, SettingsState>(
         bloc: _settingsBloc,
         builder: (context, state) {
           if (state is SettingsInitial) {
@@ -110,7 +107,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
           }
           return const SizedBox();
         },
+      );
+    if (widget.embedded) {
+      return body;
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).settingsLabel),
       ),
+      body: body,
     );
   }
 

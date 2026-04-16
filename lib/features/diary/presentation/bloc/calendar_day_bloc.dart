@@ -8,8 +8,11 @@ import 'package:opennutritracker/core/domain/usecase/add_tracked_day_usecase.dar
 import 'package:opennutritracker/core/domain/usecase/delete_intake_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/delete_user_activity_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_intake_usecase.dart';
+import 'package:opennutritracker/core/domain/usecase/get_kcal_goal_usecase.dart';
+import 'package:opennutritracker/core/domain/usecase/get_macro_goal_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_tracked_day_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_user_activity_usecase.dart';
+import 'package:opennutritracker/core/utils/calc/calorie_goal_calc.dart';
 import 'package:opennutritracker/core/utils/calc/macro_calc.dart';
 import 'package:opennutritracker/core/utils/locator.dart';
 import 'package:opennutritracker/features/diary/presentation/bloc/diary_bloc.dart';
@@ -25,6 +28,8 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
   final DeleteUserActivityUsecase _deleteUserActivityUsecase;
   final GetTrackedDayUsecase _getTrackedDayUsecase;
   final AddTrackedDayUsecase _addTrackedDayUsecase;
+  final GetKcalGoalUsecase _getKcalGoalUsecase;
+  final GetMacroGoalUsecase _getMacroGoalUsecase;
 
   DateTime? _currentDay;
 
@@ -34,7 +39,9 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
       this._deleteIntakeUsecase,
       this._deleteUserActivityUsecase,
       this._getTrackedDayUsecase,
-      this._addTrackedDayUsecase)
+      this._addTrackedDayUsecase,
+      this._getKcalGoalUsecase,
+      this._getMacroGoalUsecase)
       : super(CalendarDayInitial()) {
     on<LoadCalendarDayEvent>((event, emit) async {
       emit(CalendarDayLoading());
@@ -57,12 +64,45 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
 
     final breakfastIntakeList =
         await _getIntakeUsecase.getBreakfastIntakeByDay(day);
-
     final lunchIntakeList = await _getIntakeUsecase.getLunchIntakeByDay(day);
     final dinnerIntakeList = await _getIntakeUsecase.getDinnerIntakeByDay(day);
     final snackIntakeList = await _getIntakeUsecase.getSnackIntakeByDay(day);
 
     final trackedDayEntity = await _getTrackedDayUsecase.getTrackedDay(day);
+
+    // Compute dashboard values like HomeBloc
+    final allIntakes = [
+      ...breakfastIntakeList,
+      ...lunchIntakeList,
+      ...dinnerIntakeList,
+      ...snackIntakeList,
+    ];
+    double totalKcalSupplied(List<IntakeEntity> list) =>
+        list.map((e) => e.totalKcal).fold(0.0, (a, b) => a + b);
+    double totalCarbs(List<IntakeEntity> list) =>
+        list.map((e) => e.totalCarbsGram).fold(0.0, (a, b) => a + b);
+    double totalFats(List<IntakeEntity> list) =>
+        list.map((e) => e.totalFatsGram).fold(0.0, (a, b) => a + b);
+    double totalProteins(List<IntakeEntity> list) =>
+        list.map((e) => e.totalProteinsGram).fold(0.0, (a, b) => a + b);
+
+    final kcalSupplied = totalKcalSupplied(allIntakes);
+    final carbsIntake = totalCarbs(allIntakes);
+    final fatsIntake = totalFats(allIntakes);
+    final proteinsIntake = totalProteins(allIntakes);
+    final kcalBurned = userActivities
+        .map((e) => e.burnedKcal)
+        .fold(0.0, (a, b) => a + b);
+
+    final totalKcalGoal = await _getKcalGoalUsecase.getKcalGoal();
+    final totalCarbsGoal =
+        await _getMacroGoalUsecase.getCarbsGoal(totalKcalGoal);
+    final totalFatsGoal =
+        await _getMacroGoalUsecase.getFatsGoal(totalKcalGoal);
+    final totalProteinsGoal =
+        await _getMacroGoalUsecase.getProteinsGoal(totalKcalGoal);
+    final totalKcalLeft =
+        CalorieGoalCalc.getDailyKcalLeft(totalKcalGoal, kcalSupplied);
 
     emit(CalendarDayLoaded(
         trackedDayEntity,
@@ -70,7 +110,18 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
         breakfastIntakeList,
         lunchIntakeList,
         dinnerIntakeList,
-        snackIntakeList));
+        snackIntakeList,
+        totalKcalGoal: totalKcalGoal,
+        totalKcalLeft: totalKcalLeft,
+        totalKcalSupplied: kcalSupplied,
+        totalKcalBurned: kcalBurned,
+        totalCarbsIntake: carbsIntake,
+        totalFatsIntake: fatsIntake,
+        totalProteinsIntake: proteinsIntake,
+        totalCarbsGoal: totalCarbsGoal,
+        totalFatsGoal: totalFatsGoal,
+        totalProteinsGoal: totalProteinsGoal,
+    ));
   }
 
   Future<void> deleteIntakeItem(

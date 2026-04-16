@@ -5,6 +5,7 @@ import 'package:opennutritracker/core/presentation/widgets/home_appbar.dart';
 import 'package:opennutritracker/features/home/home_page.dart';
 import 'package:opennutritracker/core/presentation/widgets/main_appbar.dart';
 import 'package:opennutritracker/features/profile/profile_page.dart';
+import 'package:opennutritracker/features/settings/settings_screen.dart';
 import 'package:opennutritracker/generated/l10n.dart';
 
 class MainScreen extends StatefulWidget {
@@ -26,12 +27,15 @@ class _MainScreenState extends State<MainScreen> {
       const HomePage(),
       const DiaryPage(),
       const ProfilePage(),
+      const SettingsScreen(embedded: true),
     ];
     _appbarPages = [
       const HomeAppbar(),
       MainAppbar(title: S.of(context).diaryLabel, iconData: Icons.book),
       MainAppbar(
-          title: S.of(context).profileLabel, iconData: Icons.account_circle)
+          title: S.of(context).profileLabel, iconData: Icons.account_circle),
+      MainAppbar(
+          title: S.of(context).settingsLabel, iconData: Icons.settings),
     ];
     super.didChangeDependencies();
   }
@@ -66,7 +70,12 @@ class _MainScreenState extends State<MainScreen> {
               icon: _selectedPageIndex == 2
                   ? const Icon(Icons.account_circle)
                   : const Icon(Icons.account_circle_outlined),
-              label: S.of(context).profileLabel)
+              label: S.of(context).profileLabel),
+          NavigationDestination(
+              icon: _selectedPageIndex == 3
+                  ? const Icon(Icons.settings)
+                  : const Icon(Icons.settings_outlined),
+              label: S.of(context).settingsLabel),
         ],
       ),
     );
