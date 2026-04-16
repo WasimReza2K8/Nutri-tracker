@@ -26,13 +26,17 @@ class ConfigDBOAdapter extends TypeAdapter<ConfigDBO> {
     )
       ..userCarbGoalPct = fields[6] as double?
       ..userProteinGoalPct = fields[7] as double?
-      ..userFatGoalPct = fields[8] as double?;
+      ..userFatGoalPct = fields[8] as double?
+      ..cachedKcalGoal = fields[9] as double?
+      ..cachedCarbsGoal = fields[10] as double?
+      ..cachedFatsGoal = fields[11] as double?
+      ..cachedProteinsGoal = fields[12] as double?;
   }
 
   @override
   void write(BinaryWriter writer, ConfigDBO obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.hasAcceptedDisclaimer)
       ..writeByte(1)
@@ -50,7 +54,15 @@ class ConfigDBOAdapter extends TypeAdapter<ConfigDBO> {
       ..writeByte(7)
       ..write(obj.userProteinGoalPct)
       ..writeByte(8)
-      ..write(obj.userFatGoalPct);
+      ..write(obj.userFatGoalPct)
+      ..writeByte(9)
+      ..write(obj.cachedKcalGoal)
+      ..writeByte(10)
+      ..write(obj.cachedCarbsGoal)
+      ..writeByte(11)
+      ..write(obj.cachedFatsGoal)
+      ..writeByte(12)
+      ..write(obj.cachedProteinsGoal);
   }
 
   @override
@@ -78,7 +90,11 @@ ConfigDBO _$ConfigDBOFromJson(Map<String, dynamic> json) => ConfigDBO(
     )
       ..userCarbGoalPct = (json['userCarbGoalPct'] as num?)?.toDouble()
       ..userProteinGoalPct = (json['userProteinGoalPct'] as num?)?.toDouble()
-      ..userFatGoalPct = (json['userFatGoalPct'] as num?)?.toDouble();
+      ..userFatGoalPct = (json['userFatGoalPct'] as num?)?.toDouble()
+      ..cachedKcalGoal = (json['cachedKcalGoal'] as num?)?.toDouble()
+      ..cachedCarbsGoal = (json['cachedCarbsGoal'] as num?)?.toDouble()
+      ..cachedFatsGoal = (json['cachedFatsGoal'] as num?)?.toDouble()
+      ..cachedProteinsGoal = (json['cachedProteinsGoal'] as num?)?.toDouble();
 
 Map<String, dynamic> _$ConfigDBOToJson(ConfigDBO instance) => <String, dynamic>{
       'hasAcceptedDisclaimer': instance.hasAcceptedDisclaimer,
@@ -90,6 +106,10 @@ Map<String, dynamic> _$ConfigDBOToJson(ConfigDBO instance) => <String, dynamic>{
       'userCarbGoalPct': instance.userCarbGoalPct,
       'userProteinGoalPct': instance.userProteinGoalPct,
       'userFatGoalPct': instance.userFatGoalPct,
+      'cachedKcalGoal': instance.cachedKcalGoal,
+      'cachedCarbsGoal': instance.cachedCarbsGoal,
+      'cachedFatsGoal': instance.cachedFatsGoal,
+      'cachedProteinsGoal': instance.cachedProteinsGoal,
     };
 
 const _$AppThemeDBOEnumMap = {
