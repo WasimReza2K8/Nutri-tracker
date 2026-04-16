@@ -98,4 +98,19 @@ class ConfigDataSource {
     final config = _configBox.get(_configKey);
     return config?.hasAcceptedSendAnonymousData ?? false;
   }
+
+  Future<void> setCachedGoals({
+    required double kcalGoal,
+    required double carbsGoal,
+    required double fatsGoal,
+    required double proteinsGoal,
+  }) async {
+    _log.fine('Updating cached goals: kcal=$kcalGoal, carbs=$carbsGoal, fats=$fatsGoal, proteins=$proteinsGoal');
+    final config = _configBox.get(_configKey);
+    config?.cachedKcalGoal = kcalGoal;
+    config?.cachedCarbsGoal = carbsGoal;
+    config?.cachedFatsGoal = fatsGoal;
+    config?.cachedProteinsGoal = proteinsGoal;
+    config?.save();
+  }
 }

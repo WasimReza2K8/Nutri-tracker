@@ -37,4 +37,18 @@ class AddConfigUsecase {
       double carbGoalPct, double proteinGoalPct, double fatPctGoal) async {
     _configRepository.setUserMacroPct(carbGoalPct, proteinGoalPct, fatPctGoal);
   }
+
+  Future<void> setCachedGoals({
+    required double kcalGoal,
+    required double carbsGoal,
+    required double fatsGoal,
+    required double proteinsGoal,
+  }) async {
+    await _configRepository.setCachedGoals(
+      kcalGoal: kcalGoal,
+      carbsGoal: carbsGoal,
+      fatsGoal: fatsGoal,
+      proteinsGoal: proteinsGoal,
+    );
+  }
 }

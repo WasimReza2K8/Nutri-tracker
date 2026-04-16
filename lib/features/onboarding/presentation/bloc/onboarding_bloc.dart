@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:opennutritracker/core/domain/entity/user_entity.dart';
 import 'package:opennutritracker/core/domain/usecase/add_config_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/add_user_usecase.dart';
+import 'package:opennutritracker/core/domain/usecase/get_kcal_goal_usecase.dart';
+import 'package:opennutritracker/core/domain/usecase/get_macro_goal_usecase.dart';
 import 'package:opennutritracker/core/utils/calc/calorie_goal_calc.dart';
 import 'package:opennutritracker/core/utils/calc/macro_calc.dart';
 import 'package:opennutritracker/features/onboarding/domain/entity/user_data_mask_entity.dart';
@@ -16,8 +18,15 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   final userSelection = UserDataMaskEntity();
   final AddUserUsecase _addUserUsecase;
   final AddConfigUsecase _addConfigUsecase;
+  final GetKcalGoalUsecase _getKcalGoalUsecase;
+  final GetMacroGoalUsecase _getMacroGoalUsecase;
 
-  OnboardingBloc(this._addUserUsecase, this._addConfigUsecase)
+  OnboardingBloc(
+      this._addUserUsecase,
+      this._addConfigUsecase,
+      this._getKcalGoalUsecase,
+      this._getMacroGoalUsecase,
+      )
       : super(OnboardingInitialState()) {
     on<LoadOnboardingEvent>((event, emit) async {
       emit(OnboardingLoadingState());
@@ -26,12 +35,26 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     });
   }
 
-  void saveOnboardingData(BuildContext context, UserEntity userEntity,
+  Future<void> saveOnboardingData(BuildContext context, UserEntity userEntity,
       bool hasAcceptedDataCollection, bool usesImperialUnits) async {
-    _addUserUsecase.addUser(userEntity);
-    _addConfigUsecase
+    await _addUserUsecase.addUser(userEntity);
+    await _addConfigUsecase
         .setConfigHasAcceptedAnonymousData(hasAcceptedDataCollection);
-    _addConfigUsecase.setConfigUsesImperialUnits(usesImperialUnits);
+    await _addConfigUsecase.setConfigUsesImperialUnits(usesImperialUnits);
+
+    // Compute and persist calorie and macro goals
+    final kcalGoal = await _getKcalGoalUsecase.getKcalGoal(
+        userEntity: userEntity, totalKcalActivitiesParam: 0);
+    final carbsGoal = await _getMacroGoalUsecase.getCarbsGoal(kcalGoal);
+    final fatsGoal = await _getMacroGoalUsecase.getFatsGoal(kcalGoal);
+    final proteinsGoal = await _getMacroGoalUsecase.getProteinsGoal(kcalGoal);
+
+    await _addConfigUsecase.setCachedGoals(
+      kcalGoal: kcalGoal,
+      carbsGoal: carbsGoal,
+      fatsGoal: fatsGoal,
+      proteinsGoal: proteinsGoal,
+    );
   }
 
   double? getOverviewCalorieGoal() {

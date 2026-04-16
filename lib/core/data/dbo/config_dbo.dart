@@ -26,6 +26,14 @@ class ConfigDBO extends HiveObject {
   double? userProteinGoalPct;
   @HiveField(8)
   double? userFatGoalPct;
+  @HiveField(9)
+  double? cachedKcalGoal;
+  @HiveField(10)
+  double? cachedCarbsGoal;
+  @HiveField(11)
+  double? cachedFatsGoal;
+  @HiveField(12)
+  double? cachedProteinsGoal;
 
   ConfigDBO(this.hasAcceptedDisclaimer, this.hasAcceptedPolicy,
       this.hasAcceptedSendAnonymousData, this.selectedAppTheme,

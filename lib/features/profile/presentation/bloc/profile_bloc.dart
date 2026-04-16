@@ -4,8 +4,10 @@ import 'package:opennutritracker/core/domain/entity/user_bmi_entity.dart';
 import 'package:opennutritracker/core/domain/entity/user_entity.dart';
 import 'package:opennutritracker/core/domain/usecase/add_tracked_day_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/add_user_usecase.dart';
+import 'package:opennutritracker/core/domain/usecase/add_config_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_config_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_kcal_goal_usecase.dart';
+import 'package:opennutritracker/core/domain/usecase/get_macro_goal_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_user_usecase.dart';
 import 'package:opennutritracker/core/utils/calc/bmi_calc.dart';
 import 'package:opennutritracker/core/utils/calc/unit_calc.dart';
@@ -24,13 +26,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AddTrackedDayUsecase _addTrackedDayUsecase;
   final GetConfigUsecase _getConfigUsecase;
   final GetKcalGoalUsecase _getKcalGoalUsecase;
+  final AddConfigUsecase _addConfigUsecase;
+  final GetMacroGoalUsecase _getMacroGoalUsecase;
 
   ProfileBloc(
       this._getUserUsecase,
       this._addUserUsecase,
       this._addTrackedDayUsecase,
       this._getConfigUsecase,
-      this._getKcalGoalUsecase)
+      this._getKcalGoalUsecase,
+      this._addConfigUsecase,
+      this._getMacroGoalUsecase)
       : super(ProfileInitial()) {
     on<LoadProfileEvent>((event, emit) async {
       emit(ProfileLoadingState());
@@ -52,6 +58,20 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   void updateUser(UserEntity userEntity) async {
     // Update user in DB
     await _addUserUsecase.addUser(userEntity);
+
+    // Recalculate and persist calorie and macro goals
+    final kcalGoal = await _getKcalGoalUsecase.getKcalGoal(
+        userEntity: userEntity, totalKcalActivitiesParam: 0);
+    final carbsGoal = await _getMacroGoalUsecase.getCarbsGoal(kcalGoal);
+    final fatsGoal = await _getMacroGoalUsecase.getFatsGoal(kcalGoal);
+    final proteinsGoal = await _getMacroGoalUsecase.getProteinsGoal(kcalGoal);
+
+    await _addConfigUsecase.setCachedGoals(
+      kcalGoal: kcalGoal,
+      carbsGoal: carbsGoal,
+      fatsGoal: fatsGoal,
+      proteinsGoal: proteinsGoal,
+    );
 
     // Update Tracked Day
     await _updateTrackedDayCalorieGoal(userEntity, DateTime.now());

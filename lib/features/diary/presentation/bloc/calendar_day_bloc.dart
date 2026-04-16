@@ -7,9 +7,8 @@ import 'package:opennutritracker/core/domain/entity/user_activity_entity.dart';
 import 'package:opennutritracker/core/domain/usecase/add_tracked_day_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/delete_intake_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/delete_user_activity_usecase.dart';
+import 'package:opennutritracker/core/domain/usecase/get_cached_goals_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_intake_usecase.dart';
-import 'package:opennutritracker/core/domain/usecase/get_kcal_goal_usecase.dart';
-import 'package:opennutritracker/core/domain/usecase/get_macro_goal_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_tracked_day_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_user_activity_usecase.dart';
 import 'package:opennutritracker/core/utils/calc/calorie_goal_calc.dart';
@@ -28,8 +27,7 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
   final DeleteUserActivityUsecase _deleteUserActivityUsecase;
   final GetTrackedDayUsecase _getTrackedDayUsecase;
   final AddTrackedDayUsecase _addTrackedDayUsecase;
-  final GetKcalGoalUsecase _getKcalGoalUsecase;
-  final GetMacroGoalUsecase _getMacroGoalUsecase;
+  final GetCachedGoalsUsecase _getCachedGoalsUsecase;
 
   DateTime? _currentDay;
 
@@ -40,8 +38,7 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
       this._deleteUserActivityUsecase,
       this._getTrackedDayUsecase,
       this._addTrackedDayUsecase,
-      this._getKcalGoalUsecase,
-      this._getMacroGoalUsecase)
+      this._getCachedGoalsUsecase)
       : super(CalendarDayInitial()) {
     on<LoadCalendarDayEvent>((event, emit) async {
       emit(CalendarDayLoading());
@@ -70,37 +67,44 @@ class CalendarDayBloc extends Bloc<CalendarDayEvent, CalendarDayState> {
 
     final trackedDayEntity = await _getTrackedDayUsecase.getTrackedDay(day);
 
-    // Compute dashboard values like HomeBloc
+    // Compute consumed values from intakes
     final allIntakes = [
       ...breakfastIntakeList,
       ...lunchIntakeList,
       ...dinnerIntakeList,
       ...snackIntakeList,
     ];
-    double totalKcalSupplied(List<IntakeEntity> list) =>
-        list.map((e) => e.totalKcal).fold(0.0, (a, b) => a + b);
-    double totalCarbs(List<IntakeEntity> list) =>
-        list.map((e) => e.totalCarbsGram).fold(0.0, (a, b) => a + b);
-    double totalFats(List<IntakeEntity> list) =>
-        list.map((e) => e.totalFatsGram).fold(0.0, (a, b) => a + b);
-    double totalProteins(List<IntakeEntity> list) =>
-        list.map((e) => e.totalProteinsGram).fold(0.0, (a, b) => a + b);
+    final kcalSupplied =
+        allIntakes.map((e) => e.totalKcal).fold(0.0, (a, b) => a + b);
+    final carbsIntake =
+        allIntakes.map((e) => e.totalCarbsGram).fold(0.0, (a, b) => a + b);
+    final fatsIntake =
+        allIntakes.map((e) => e.totalFatsGram).fold(0.0, (a, b) => a + b);
+    final proteinsIntake =
+        allIntakes.map((e) => e.totalProteinsGram).fold(0.0, (a, b) => a + b);
 
-    final kcalSupplied = totalKcalSupplied(allIntakes);
-    final carbsIntake = totalCarbs(allIntakes);
-    final fatsIntake = totalFats(allIntakes);
-    final proteinsIntake = totalProteins(allIntakes);
+    // Burned kcal only for this specific day
     final kcalBurned = userActivities
         .map((e) => e.burnedKcal)
         .fold(0.0, (a, b) => a + b);
 
-    final totalKcalGoal = await _getKcalGoalUsecase.getKcalGoal();
+    // Use cached base goals (computed at onboarding/profile change with 0 activities)
+    // and add this day's burned kcal to increase the goal for this day only
+    final cachedGoals = await _getCachedGoalsUsecase.getCachedGoals();
+    final baseKcalGoal = cachedGoals.kcalGoal ?? 0;
+    final baseCarbsGoal = cachedGoals.carbsGoal ?? 0;
+    final baseFatsGoal = cachedGoals.fatsGoal ?? 0;
+    final baseProteinsGoal = cachedGoals.proteinsGoal ?? 0;
+
+    // Activities increase the calorie and macro budget for this day only
+    final totalKcalGoal = baseKcalGoal + kcalBurned;
     final totalCarbsGoal =
-        await _getMacroGoalUsecase.getCarbsGoal(totalKcalGoal);
+        baseCarbsGoal + MacroCalc.getTotalCarbsGoal(kcalBurned);
     final totalFatsGoal =
-        await _getMacroGoalUsecase.getFatsGoal(totalKcalGoal);
+        baseFatsGoal + MacroCalc.getTotalFatsGoal(kcalBurned);
     final totalProteinsGoal =
-        await _getMacroGoalUsecase.getProteinsGoal(totalKcalGoal);
+        baseProteinsGoal + MacroCalc.getTotalProteinsGoal(kcalBurned);
+
     final totalKcalLeft =
         CalorieGoalCalc.getDailyKcalLeft(totalKcalGoal, kcalSupplied);
 

@@ -63,4 +63,18 @@ class ConfigRepository {
     _configDataSource.setConfigProteinGoalPct(protein);
     _configDataSource.setConfigFatGoalPct(fat);
   }
+
+  Future<void> setCachedGoals({
+    required double kcalGoal,
+    required double carbsGoal,
+    required double fatsGoal,
+    required double proteinsGoal,
+  }) async {
+    await _configDataSource.setCachedGoals(
+      kcalGoal: kcalGoal,
+      carbsGoal: carbsGoal,
+      fatsGoal: fatsGoal,
+      proteinsGoal: proteinsGoal,
+    );
+  }
 }

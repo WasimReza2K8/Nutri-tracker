@@ -16,7 +16,8 @@ class GetKcalGoalUsecase {
   Future<double> getKcalGoal(
       {UserEntity? userEntity,
       double? totalKcalActivitiesParam,
-      double? kcalUserAdjustment}) async {
+      double? kcalUserAdjustment}
+      ) async {
     final user = userEntity ?? await _userRepository.getUserData();
     final config = await _configRepository.getConfig();
     final totalKcalActivities = totalKcalActivitiesParam ??

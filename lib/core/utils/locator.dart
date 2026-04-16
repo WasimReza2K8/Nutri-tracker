@@ -23,6 +23,7 @@ import 'package:opennutritracker/core/domain/usecase/get_config_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_intake_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_kcal_goal_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_macro_goal_usecase.dart';
+import 'package:opennutritracker/core/domain/usecase/get_cached_goals_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_physical_activity_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_tracked_day_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/get_user_activity_usecase.dart';
@@ -81,9 +82,8 @@ Future<void> initLocator() async {
 
   // BLoCs
   locator.registerLazySingleton<OnboardingBloc>(
-      () => OnboardingBloc(locator(), locator()));
+      () => OnboardingBloc(locator(), locator(), locator(), locator()));
   locator.registerLazySingleton<HomeBloc>(() => HomeBloc(
-      locator(),
       locator(),
       locator(),
       locator(),
@@ -95,9 +95,9 @@ Future<void> initLocator() async {
       locator()));
   locator.registerLazySingleton(() => DiaryBloc(locator(), locator()));
   locator.registerLazySingleton(() => CalendarDayBloc(
-      locator(), locator(), locator(), locator(), locator(), locator(), locator(), locator()));
+      locator(), locator(), locator(), locator(), locator(), locator(), locator()));
   locator.registerLazySingleton<ProfileBloc>(
-      () => ProfileBloc(locator(), locator(), locator(), locator(), locator()));
+      () => ProfileBloc(locator(), locator(), locator(), locator(), locator(), locator(), locator()));
   locator.registerLazySingleton(() =>
       SettingsBloc(locator(), locator(), locator(), locator(), locator()));
   locator.registerFactory(() => ExportImportBloc(locator(), locator()));
@@ -155,6 +155,7 @@ Future<void> initLocator() async {
   locator.registerLazySingleton(
       () => GetKcalGoalUsecase(locator(), locator(), locator()));
   locator.registerLazySingleton(() => GetMacroGoalUsecase(locator()));
+  locator.registerLazySingleton(() => GetCachedGoalsUsecase(locator()));
   locator.registerLazySingleton(
       () => ExportDataUsecase(locator(), locator(), locator()));
   locator.registerLazySingleton(
