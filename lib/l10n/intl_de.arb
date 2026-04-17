@@ -406,5 +406,13 @@
   "paSkiingGeneral": "Skifahren",
   "paSkiingGeneralDesc": "allgemein",
   "paSnowShovingModerate": "Schnee schaufeln",
-  "paSnowShovingModerateDesc": "manuell, mäßige Anstrengung"
+  "paSnowShovingModerateDesc": "manuell, mige Anstrengung",
+  "searchModeLabel": "Suche",
+  "cameraModeLabel": "Kamera",
+  "barcodeModeLabel": "Barcode",
+  "manualModeLabel": "Manuell",
+  "cameraPermissionDeniedLabel": "Kameraberechtigung ist erforderlich, um Essen zu scannen",
+  "cameraAnalyzingLabel": "Essen wird analysiert...",
+  "cameraErrorLabel": "Bildanalyse fehlgeschlagen. Bitte versuchen Sie es erneut.",
+  "cameraTakePhotoLabel": "Fotografieren Sie Ihr Essen"
 }

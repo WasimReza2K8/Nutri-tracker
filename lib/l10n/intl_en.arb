@@ -416,5 +416,13 @@
   "paSkiingGeneral": "skiing",
   "paSkiingGeneralDesc": "general",
   "paSnowShovingModerate": "snow shoveling",
-  "paSnowShovingModerateDesc": "by hand, moderate effort"
+  "paSnowShovingModerateDesc": "by hand, moderate effort",
+  "searchModeLabel": "Search",
+  "cameraModeLabel": "Camera",
+  "barcodeModeLabel": "Barcode",
+  "manualModeLabel": "Manual",
+  "cameraPermissionDeniedLabel": "Camera permission is required to scan food",
+  "cameraAnalyzingLabel": "Analyzing your food...",
+  "cameraErrorLabel": "Failed to analyze image. Please try again.",
+  "cameraTakePhotoLabel": "Take a photo of your food"
 }

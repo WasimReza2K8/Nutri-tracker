@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:opennutritracker/core/presentation/widgets/error_dialog.dart';
+import 'package:opennutritracker/core/utils/custom_icons.dart';
 import 'package:opennutritracker/core/utils/locator.dart';
 import 'package:opennutritracker/core/utils/navigation_options.dart';
 import 'package:opennutritracker/features/add_meal/domain/entity/meal_entity.dart';
 import 'package:opennutritracker/features/add_meal/presentation/add_meal_type.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/add_meal_bloc.dart';
+import 'package:opennutritracker/features/add_meal/presentation/bloc/camera_scan_bloc.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/food_bloc.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/products_bloc.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/recent_meal_bloc.dart';
@@ -16,6 +21,9 @@ import 'package:opennutritracker/features/add_meal/presentation/widgets/no_resul
 import 'package:opennutritracker/features/edit_meal/presentation/edit_meal_screen.dart';
 import 'package:opennutritracker/features/scanner/scanner_screen.dart';
 import 'package:opennutritracker/generated/l10n.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+enum _AddMealMode { search, camera, barcode, manual }
 
 class AddMealScreen extends StatefulWidget {
   const AddMealScreen({super.key});
@@ -34,17 +42,21 @@ class _AddMealScreenState extends State<AddMealScreen>
   late ProductsBloc _productsBloc;
   late FoodBloc _foodBloc;
   late RecentMealBloc _recentMealBloc;
+  late CameraScanBloc _cameraScanBloc;
 
   late TabController _tabController;
+
+  _AddMealMode _selectedMode = _AddMealMode.search;
+  bool _usesImperialUnits = false;
 
   @override
   void initState() {
     _productsBloc = locator<ProductsBloc>();
     _foodBloc = locator<FoodBloc>();
     _recentMealBloc = locator<RecentMealBloc>();
+    _cameraScanBloc = locator<CameraScanBloc>();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
-      // Update search results when tab changes
       _onSearchSubmit(_searchStringListener.value);
     });
     super.initState();
@@ -68,182 +80,376 @@ class _AddMealScreenState extends State<AddMealScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(_mealType.getTypeName(context)),
-          actions: [
-            BlocBuilder<AddMealBloc, AddMealState>(
-              bloc: locator<AddMealBloc>()..add(InitializeAddMealEvent()),
-              builder: (BuildContext context, AddMealState state) {
-                if (state is AddMealLoadedState) {
-                  return IconButton(
-                    onPressed: () =>
-                        _onCustomAddButtonPressed(state.usesImperialUnits),
-                    icon: const Icon(Icons.add_circle_outline),
-                  );
-                }
-                return const SizedBox();
-              },
-            )
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+      appBar: AppBar(
+        title: Text(_mealType.getTypeName(context)),
+      ),
+      body: BlocBuilder<AddMealBloc, AddMealState>(
+        bloc: locator<AddMealBloc>()..add(const InitializeAddMealEvent()),
+        builder: (context, addMealState) {
+          if (addMealState is AddMealLoadedState) {
+            _usesImperialUnits = addMealState.usesImperialUnits;
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            child: Column(
+              children: [
+                _buildModeSelector(context),
+                const SizedBox(height: 12),
+                Expanded(child: _buildBodyForMode(context)),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildModeSelector(BuildContext context) {
+    final modes = [
+      (_AddMealMode.search, Icons.search, S.of(context).searchModeLabel),
+      (_AddMealMode.camera, Icons.camera_alt, S.of(context).cameraModeLabel),
+      (_AddMealMode.barcode, CustomIcons.barcode_scan, S.of(context).barcodeModeLabel),
+      (_AddMealMode.manual, Icons.keyboard, S.of(context).manualModeLabel),
+    ];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: modes.map((entry) {
+        final (mode, icon, label) = entry;
+        final isSelected = _selectedMode == mode;
+        return GestureDetector(
+          onTap: () => _onModeSelected(mode),
           child: Column(
             children: [
-              MealSearchBar(
-                searchStringListener: _searchStringListener,
-                onSearchSubmit: _onSearchSubmit,
-                onBarcodePressed: _onBarcodeIconPressed,
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)
+                      : Theme.of(context).colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(16),
+                  border: isSelected
+                      ? Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2,
+                        )
+                      : null,
+                ),
+                child: Icon(
+                  icon,
+                  size: 32,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
-              const SizedBox(height: 16.0),
-              TabBar(
-                  tabs: [
-                    Tab(text: S.of(context).searchProductsPage),
-                    Tab(text: S.of(context).searchFoodPage),
-                    Tab(text: S.of(context).recentlyAddedLabel)
-                  ],
-                  controller: _tabController,
-                  indicatorSize: TabBarIndicatorSize.tab),
-              const SizedBox(height: 16),
-              Expanded(
-                child: TabBarView(controller: _tabController, children: [
-                  Column(
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          alignment: Alignment.centerLeft,
-                          child: Text(S.of(context).searchResultsLabel,
-                              style:
-                                  Theme.of(context).textTheme.headlineSmall)),
-                      BlocBuilder<ProductsBloc, ProductsState>(
-                        bloc: _productsBloc,
-                        builder: (context, state) {
-                          if (state is ProductsInitial) {
-                            return const DefaultsResultsWidget();
-                          } else if (state is ProductsLoadingState) {
-                            return const Padding(
-                              padding: EdgeInsets.only(top: 32),
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (state is ProductsLoadedState) {
-                            return state.products.isNotEmpty
-                                ? Flexible(
-                                    child: ListView.builder(
-                                        itemCount: state.products.length,
-                                        itemBuilder: (context, index) {
-                                          return MealItemCard(
-                                            day: _day,
-                                            mealEntity: state.products[index],
-                                            addMealType: _mealType,
-                                            usesImperialUnits:
-                                                state.usesImperialUnits,
-                                          );
-                                        }))
-                                : const NoResultsWidget();
-                          } else if (state is ProductsFailedState) {
-                            return ErrorDialog(
-                              errorText: S.of(context).errorFetchingProductData,
-                              onRefreshPressed: _onProductsRefreshButtonPressed,
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          alignment: Alignment.centerLeft,
-                          child: Text(S.of(context).searchResultsLabel,
-                              style:
-                                  Theme.of(context).textTheme.headlineSmall)),
-                      BlocBuilder<FoodBloc, FoodState>(
-                        bloc: _foodBloc,
-                        builder: (context, state) {
-                          if (state is FoodInitial) {
-                            return const DefaultsResultsWidget();
-                          } else if (state is FoodLoadingState) {
-                            return const Padding(
-                              padding: EdgeInsets.only(top: 32),
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (state is FoodLoadedState) {
-                            return state.food.isNotEmpty
-                                ? Flexible(
-                                    child: ListView.builder(
-                                        itemCount: state.food.length,
-                                        itemBuilder: (context, index) {
-                                          return MealItemCard(
-                                            day: _day,
-                                            mealEntity: state.food[index],
-                                            addMealType: _mealType,
-                                            usesImperialUnits:
-                                                state.usesImperialUnits,
-                                          );
-                                        }))
-                                : const NoResultsWidget();
-                          } else if (state is FoodFailedState) {
-                            return ErrorDialog(
-                              errorText: S.of(context).errorFetchingProductData,
-                              onRefreshPressed: _onFoodRefreshButtonPressed,
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      BlocBuilder<RecentMealBloc, RecentMealState>(
-                          bloc: _recentMealBloc,
-                          builder: (context, state) {
-                            if (state is RecentMealInitial) {
-                              _recentMealBloc.add(
-                                  const LoadRecentMealEvent(searchString: ""));
-                              return const SizedBox();
-                            } else if (state is RecentMealLoadingState) {
-                              return const Padding(
-                                padding: EdgeInsets.only(top: 32),
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (state is RecentMealLoadedState) {
-                              return state.recentMeals.isNotEmpty
-                                  ? Flexible(
-                                      child: ListView.builder(
-                                          itemCount: state.recentMeals.length,
-                                          itemBuilder: (context, index) {
-                                            return MealItemCard(
-                                              day: _day,
-                                              mealEntity:
-                                                  state.recentMeals[index],
-                                              addMealType: _mealType,
-                                              usesImperialUnits:
-                                                  state.usesImperialUnits,
-                                            );
-                                          }))
-                                  : const NoResultsWidget();
-                            } else if (state is RecentMealFailedState) {
-                              return ErrorDialog(
-                                errorText:
-                                    S.of(context).noMealsRecentlyAddedLabel,
-                                onRefreshPressed:
-                                    _onRecentMealsRefreshButtonPressed,
-                              );
-                            }
-                            return const SizedBox();
-                          })
-                    ],
-                  )
-                ]),
-              )
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
             ],
           ),
-        ));
+        );
+      }).toList(),
+    );
+  }
+
+  void _onModeSelected(_AddMealMode mode) {
+    if (mode == _AddMealMode.barcode) {
+      _onBarcodeIconPressed();
+      return;
+    }
+    if (mode == _AddMealMode.manual) {
+      _openEditMealScreen(_usesImperialUnits);
+      return;
+    }
+    if (mode == _AddMealMode.camera) {
+      setState(() => _selectedMode = mode);
+      _onCameraPressed();
+      return;
+    }
+    setState(() => _selectedMode = mode);
+  }
+
+  Widget _buildBodyForMode(BuildContext context) {
+    switch (_selectedMode) {
+      case _AddMealMode.search:
+        return _buildSearchBody(context);
+      case _AddMealMode.camera:
+        return _buildCameraBody(context);
+      case _AddMealMode.barcode:
+      case _AddMealMode.manual:
+        return const SizedBox();
+    }
+  }
+
+  Widget _buildSearchBody(BuildContext context) {
+    return Column(
+      children: [
+        MealSearchBar(
+          searchStringListener: _searchStringListener,
+          onSearchSubmit: _onSearchSubmit,
+          onBarcodePressed: _onBarcodeIconPressed,
+        ),
+        const SizedBox(height: 16.0),
+        TabBar(
+          tabs: [
+            Tab(text: S.of(context).searchFoodPage),
+          //  Tab(text: S.of(context).searchFoodPage),
+            Tab(text: S.of(context).recentlyAddedLabel),
+          ],
+          controller: _tabController,
+          indicatorSize: TabBarIndicatorSize.tab,
+        ),
+        const SizedBox(height: 16),
+        Expanded(
+          child: TabBarView(controller: _tabController, children: [
+            Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 12.0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(S.of(context).searchResultsLabel,
+                      style: Theme.of(context).textTheme.headlineSmall),
+                ),
+                BlocBuilder<ProductsBloc, ProductsState>(
+                  bloc: _productsBloc,
+                  builder: (context, state) {
+                    if (state is ProductsInitial) {
+                      return const DefaultsResultsWidget();
+                    } else if (state is ProductsLoadingState) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 32),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is ProductsLoadedState) {
+                      return state.products.isNotEmpty
+                          ? Flexible(
+                              child: ListView.builder(
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                itemCount: state.products.length,
+                                itemBuilder: (context, index) {
+                                  return MealItemCard(
+                                    day: _day,
+                                    mealEntity: state.products[index],
+                                    addMealType: _mealType,
+                                    usesImperialUnits: state.usesImperialUnits,
+                                  );
+                                },
+                              ),
+                            )
+                          : const NoResultsWidget();
+                    } else if (state is ProductsFailedState) {
+                      return ErrorDialog(
+                        errorText: S.of(context).errorFetchingProductData,
+                        onRefreshPressed: _onProductsRefreshButtonPressed,
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ],
+            ),
+           /* Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(S.of(context).searchResultsLabel,
+                      style: Theme.of(context).textTheme.headlineSmall),
+                ),
+                BlocBuilder<FoodBloc, FoodState>(
+                  bloc: _foodBloc,
+                  builder: (context, state) {
+                    if (state is FoodInitial) {
+                      return const DefaultsResultsWidget();
+                    } else if (state is FoodLoadingState) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 32),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is FoodLoadedState) {
+                      return state.food.isNotEmpty
+                          ? Flexible(
+                              child: ListView.builder(
+                                itemCount: state.food.length,
+                                itemBuilder: (context, index) {
+                                  return MealItemCard(
+                                    day: _day,
+                                    mealEntity: state.food[index],
+                                    addMealType: _mealType,
+                                    usesImperialUnits: state.usesImperialUnits,
+                                  );
+                                },
+                              ),
+                            )
+                          : const NoResultsWidget();
+                    } else if (state is FoodFailedState) {
+                      return ErrorDialog(
+                        errorText: S.of(context).errorFetchingProductData,
+                        onRefreshPressed: _onFoodRefreshButtonPressed,
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
+              ],
+            ),*/
+            Column(
+              children: [
+                BlocBuilder<RecentMealBloc, RecentMealState>(
+                  bloc: _recentMealBloc,
+                  builder: (context, state) {
+                    if (state is RecentMealInitial) {
+                      _recentMealBloc
+                          .add(const LoadRecentMealEvent(searchString: ""));
+                      return const SizedBox();
+                    } else if (state is RecentMealLoadingState) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 32),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is RecentMealLoadedState) {
+                      return state.recentMeals.isNotEmpty
+                          ? Flexible(
+                              child: ListView.builder(
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                itemCount: state.recentMeals.length,
+                                itemBuilder: (context, index) {
+                                  return MealItemCard(
+                                    day: _day,
+                                    mealEntity: state.recentMeals[index],
+                                    addMealType: _mealType,
+                                    usesImperialUnits: state.usesImperialUnits,
+                                  );
+                                },
+                              ),
+                            )
+                          : const NoResultsWidget();
+                    } else if (state is RecentMealFailedState) {
+                      return ErrorDialog(
+                        errorText: S.of(context).noMealsRecentlyAddedLabel,
+                        onRefreshPressed: _onRecentMealsRefreshButtonPressed,
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+              ],
+            ),
+          ]),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCameraBody(BuildContext context) {
+    return BlocBuilder<CameraScanBloc, CameraScanState>(
+      bloc: _cameraScanBloc,
+      builder: (context, state) {
+        if (state is CameraScanInitialState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.camera_alt_outlined,
+                    size: 80,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
+                const SizedBox(height: 16),
+                Text(S.of(context).cameraTakePhotoLabel,
+                    style: Theme.of(context).textTheme.bodyLarge),
+                const SizedBox(height: 24),
+                FilledButton.icon(
+                  onPressed: _onCameraPressed,
+                  icon: const Icon(Icons.camera_alt),
+                  label: Text(S.of(context).cameraModeLabel),
+                ),
+              ],
+            ),
+          );
+        } else if (state is CameraScanLoadingState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 16),
+                Text(S.of(context).cameraAnalyzingLabel),
+              ],
+            ),
+          );
+        } else if (state is CameraScanLoadedState) {
+          if (state.results.isEmpty) {
+            return const NoResultsWidget();
+          }
+          return ListView.builder(
+            itemCount: state.results.length,
+            itemBuilder: (context, index) {
+              return MealItemCard(
+                day: _day,
+                mealEntity: state.results[index],
+                addMealType: _mealType,
+                usesImperialUnits: _usesImperialUnits,
+              );
+            },
+          );
+        } else if (state is CameraScanErrorState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    size: 64, color: Theme.of(context).colorScheme.error),
+                const SizedBox(height: 16),
+                Text(S.of(context).cameraErrorLabel),
+                const SizedBox(height: 24),
+                FilledButton.icon(
+                  onPressed: _onCameraPressed,
+                  icon: const Icon(Icons.refresh),
+                  label: Text(S.of(context).cameraModeLabel),
+                ),
+              ],
+            ),
+          );
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  Future<void> _onCameraPressed() async {
+    final status = await Permission.camera.request();
+    if (!status.isGranted) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context).cameraPermissionDeniedLabel)),
+        );
+      }
+      return;
+    }
+
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 1024,
+      maxHeight: 1024,
+      imageQuality: 85,
+    );
+
+    if (pickedFile != null) {
+      final imageBytes = await File(pickedFile.path).readAsBytes();
+      _cameraScanBloc.add(AnalyzeImageEvent(imageBytes: imageBytes));
+    }
   }
 
   void _onProductsRefreshButtonPressed() {
@@ -261,7 +467,6 @@ class _AddMealScreenState extends State<AddMealScreen>
   void _onSearchSubmit(String inputText) {
     switch (_tabController.index) {
       case 0:
-     //   _productsBloc.add(LoadProductsEvent(searchString: inputText));
         _productsBloc.add(LoadFoodSearchProductsEvent(searchString: inputText));
       case 1:
         _foodBloc.add(LoadFoodEvent(searchString: inputText));
@@ -275,30 +480,7 @@ class _AddMealScreenState extends State<AddMealScreen>
         arguments: ScannerScreenArguments(_day, _mealType.getIntakeType()));
   }
 
-  void _onCustomAddButtonPressed(bool usesImperialUnits) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(S.of(context).createCustomDialogTitle),
-            content: Text(S.of(context).createCustomDialogContent),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(), // close dialog
-                  child: Text(S.of(context).dialogCancelLabel)),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close dialog
-                    _openEditMealScreen(usesImperialUnits);
-                  },
-                  child: Text(S.of(context).buttonYesLabel)),
-            ],
-          );
-        });
-  }
-
   void _openEditMealScreen(bool usesImperialUnits) {
-    // TODO
     Navigator.of(context).pushNamed(NavigationOptions.editMealRoute,
         arguments: EditMealScreenArguments(
           _day,

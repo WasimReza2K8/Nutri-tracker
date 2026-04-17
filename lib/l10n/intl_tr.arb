@@ -412,6 +412,14 @@
   "paIceSkatingGeneralDesc": "genel",
   "paSkiingGeneral": "kayak",
   "paSkiingGeneralDesc": "genel",
-  "paSnowShovingModerate": "kar küreme",
-  "paSnowShovingModerateDesc": "elle, orta derecede çaba"
+  "paSnowShovingModerate": "kar kreme",
+  "paSnowShovingModerateDesc": "elle, orta derecede aba",
+  "searchModeLabel": "Ara",
+  "cameraModeLabel": "Kamera",
+  "barcodeModeLabel": "Barkod",
+  "manualModeLabel": "Manuel",
+  "cameraPermissionDeniedLabel": "Yiyecek taramak için kamera izni gereklidir",
+  "cameraAnalyzingLabel": "Yiyeceğiniz analiz ediliyor...",
+  "cameraErrorLabel": "Görüntü analizi başarısız. Lütfen tekrar deneyin.",
+  "cameraTakePhotoLabel": "Yiyeceğinizin fotoğrafını çekin"
 }

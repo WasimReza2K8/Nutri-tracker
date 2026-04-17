@@ -44,6 +44,7 @@ import 'package:opennutritracker/features/add_meal/data/repository/products_repo
 import 'package:opennutritracker/features/add_meal/domain/usecase/search_food_usecase.dart';
 import 'package:opennutritracker/features/add_meal/domain/usecase/search_products_usecase.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/add_meal_bloc.dart';
+import 'package:opennutritracker/features/add_meal/presentation/bloc/camera_scan_bloc.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/food_bloc.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/products_bloc.dart';
 import 'package:opennutritracker/features/add_meal/presentation/bloc/recent_meal_bloc.dart';
@@ -112,6 +113,7 @@ Future<void> initLocator() async {
   locator.registerFactory<ScannerBloc>(() => ScannerBloc(locator(), locator()));
   locator.registerFactory<EditMealBloc>(() => EditMealBloc(locator()));
   locator.registerFactory<AddMealBloc>(() => AddMealBloc(locator()));
+  locator.registerFactory<CameraScanBloc>(() => CameraScanBloc(locator()));
   locator.registerFactory<ProductsBloc>(
       () => ProductsBloc(locator(), locator(), locator()));
   locator.registerFactory<FoodBloc>(() => FoodBloc(locator(), locator()));
