@@ -921,6 +921,36 @@ class S {
     );
   }
 
+  /// `Components`
+  String get componentsLabel {
+    return Intl.message(
+      'Components',
+      name: 'componentsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add more`
+  String get addMoreLabel {
+    return Intl.message(
+      'Add more',
+      name: 'addMoreLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Calories`
+  String get caloriesLabel {
+    return Intl.message(
+      'Calories',
+      name: 'caloriesLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Activity`
   String get activityLabel {
     return Intl.message(

@@ -7,6 +7,7 @@ import 'package:opennutritracker/core/utils/custom_icons.dart';
 import 'package:opennutritracker/features/add_activity/presentation/add_activity_screen.dart';
 import 'package:opennutritracker/features/add_meal/presentation/add_meal_screen.dart';
 import 'package:opennutritracker/features/add_meal/presentation/add_meal_type.dart';
+import 'package:opennutritracker/features/diary/presentation/screens/calorie_detail_screen.dart';
 import 'package:opennutritracker/generated/l10n.dart';
 
 class DayInfoWidget extends StatelessWidget {
@@ -84,6 +85,11 @@ class DayInfoWidget extends StatelessWidget {
                 names: _joinMealNames(breakfastIntake),
                 onAddTap: () =>
                     _openAddMeal(context, AddMealType.breakfastType),
+                onRowTap: () => _openDetail(context,
+                    title: S.of(context).breakfastLabel,
+                    icon: Icons.bakery_dining_outlined,
+                    intakeList: breakfastIntake,
+                    addMealType: AddMealType.breakfastType),
               ),
               _buildDivider(context),
               _buildTrackerItem(
@@ -94,6 +100,11 @@ class DayInfoWidget extends StatelessWidget {
                     lunchIntake.fold(0.0, (sum, item) => sum + item.totalKcal),
                 names: _joinMealNames(lunchIntake),
                 onAddTap: () => _openAddMeal(context, AddMealType.lunchType),
+                onRowTap: () => _openDetail(context,
+                    title: S.of(context).lunchLabel,
+                    icon: Icons.lunch_dining_outlined,
+                    intakeList: lunchIntake,
+                    addMealType: AddMealType.lunchType),
               ),
               _buildDivider(context),
               _buildTrackerItem(
@@ -104,6 +115,11 @@ class DayInfoWidget extends StatelessWidget {
                     dinnerIntake.fold(0.0, (sum, item) => sum + item.totalKcal),
                 names: _joinMealNames(dinnerIntake),
                 onAddTap: () => _openAddMeal(context, AddMealType.dinnerType),
+                onRowTap: () => _openDetail(context,
+                    title: S.of(context).dinnerLabel,
+                    icon: Icons.dinner_dining_outlined,
+                    intakeList: dinnerIntake,
+                    addMealType: AddMealType.dinnerType),
               ),
               _buildDivider(context),
               _buildTrackerItem(
@@ -114,6 +130,11 @@ class DayInfoWidget extends StatelessWidget {
                     snackIntake.fold(0.0, (sum, item) => sum + item.totalKcal),
                 names: _joinMealNames(snackIntake),
                 onAddTap: () => _openAddMeal(context, AddMealType.snackType),
+                onRowTap: () => _openDetail(context,
+                    title: S.of(context).snackLabel,
+                    icon: CustomIcons.food_apple_outline,
+                    intakeList: snackIntake,
+                    addMealType: AddMealType.snackType),
               ),
               _buildDivider(context),
               _buildTrackerItem(
@@ -124,6 +145,10 @@ class DayInfoWidget extends StatelessWidget {
                     0.0, (sum, item) => sum + item.burnedKcal),
                 names: _joinActivityNames(context, userActivities),
                 onAddTap: () => _openAddActivity(context),
+                onRowTap: () => _openDetail(context,
+                    title: S.of(context).activityLabel,
+                    icon: UserActivityEntity.getIconData(),
+                    activityList: userActivities),
                 isBurned: true,
               ),
             ],
@@ -162,6 +187,7 @@ class DayInfoWidget extends StatelessWidget {
     required double calories,
     required String names,
     required VoidCallback onAddTap,
+    required VoidCallback onRowTap,
     bool isBurned = false,
   }) {
     final hasValues = calories > 0;
@@ -169,71 +195,74 @@ class DayInfoWidget extends StatelessWidget {
         ? Theme.of(context).colorScheme.primary
         : Theme.of(context).colorScheme.outline;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      child: Row(
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: iconColor, width: 6),
+    return InkWell(
+      onTap: onRowTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        child: Row(
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: iconColor, width: 6),
+              ),
+              child: Icon(icon, color: iconColor, size: 28),
             ),
-            child: Icon(icon, color: iconColor, size: 28),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  '${calories.toInt()} ${S.of(context).kcalLabel}${isBurned ? ' ${S.of(context).burnedLabel}' : ''}',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                if (names.isNotEmpty) ...[
-                  const SizedBox(height: 2),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    names,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.75),
+                    title,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
                         ),
                   ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${calories.toInt()} ${S.of(context).kcalLabel}${isBurned ? ' ${S.of(context).burnedLabel}' : ''}',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  if (names.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      names,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.75),
+                          ),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Material(
-            color: Theme.of(context).colorScheme.primary,
-            shape: const CircleBorder(),
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: onAddTap,
-              child: SizedBox(
-                width: 56,
-                height: 56,
-                child: Icon(
-                  Icons.add,
-                  size: 32,
-                  color: Theme.of(context).colorScheme.surface,
+            const SizedBox(width: 8),
+            Material(
+              color: Theme.of(context).colorScheme.primary,
+              shape: const CircleBorder(),
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: onAddTap,
+                child: SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: Icon(
+                    Icons.add,
+                    size: 32,
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -274,6 +303,29 @@ class DayInfoWidget extends StatelessWidget {
     Navigator.of(context).pushNamed(
       NavigationOptions.addActivityRoute,
       arguments: AddActivityScreenArguments(day: selectedDay),
+    );
+  }
+
+  void _openDetail(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    List<IntakeEntity> intakeList = const [],
+    List<UserActivityEntity> activityList = const [],
+    AddMealType? addMealType,
+  }) {
+    Navigator.of(context).pushNamed(
+      NavigationOptions.calorieDetailRoute,
+      arguments: CalorieDetailScreenArguments(
+        title: title,
+        icon: icon,
+        intakeList: intakeList,
+        activityList: activityList,
+        selectedDay: selectedDay,
+        trackedDayEntity: trackedDayEntity,
+        usesImperialUnits: usesImperialUnits,
+        addMealType: addMealType,
+      ),
     );
   }
 }

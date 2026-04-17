@@ -37,6 +37,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "addItemLabel": MessageLookupByLibrary.simpleMessage("Add new Item:"),
         "calorieTrackerLabel":
             MessageLookupByLibrary.simpleMessage("Calorie Tracker"),
+        "componentsLabel":
+            MessageLookupByLibrary.simpleMessage("Components"),
+        "addMoreLabel":
+            MessageLookupByLibrary.simpleMessage("Add more"),
+        "caloriesLabel":
+            MessageLookupByLibrary.simpleMessage("Calories"),
         "addLabel": MessageLookupByLibrary.simpleMessage("Add"),
         "additionalInfoLabelCompendium2011": MessageLookupByLibrary.simpleMessage(
             "Information provided\n by the \n\'2011 Compendium\n of Physical Activities\'"),

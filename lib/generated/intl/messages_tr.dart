@@ -37,6 +37,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "addItemLabel": MessageLookupByLibrary.simpleMessage("Yeni Öğe Ekle:"),
         "calorieTrackerLabel":
             MessageLookupByLibrary.simpleMessage("Kalori Takibi"),
+        "componentsLabel":
+            MessageLookupByLibrary.simpleMessage("Bileşenler"),
+        "addMoreLabel":
+            MessageLookupByLibrary.simpleMessage("Daha fazla ekle"),
+        "caloriesLabel":
+            MessageLookupByLibrary.simpleMessage("Kalori"),
         "addLabel": MessageLookupByLibrary.simpleMessage("Ekle"),
         "additionalInfoLabelCompendium2011": MessageLookupByLibrary.simpleMessage(
             "Bilgi\n\'2011 Compendium\n of Physical Activities\'\nden sağlanmıştır"),
