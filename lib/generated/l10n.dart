@@ -1181,6 +1181,16 @@ class S {
     );
   }
 
+  /// `kcal over`
+  String get kcalOverLabel {
+    return Intl.message(
+      'kcal over',
+      name: 'kcalOverLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Nutrition Information`
   String get nutritionInfoLabel {
     return Intl.message(

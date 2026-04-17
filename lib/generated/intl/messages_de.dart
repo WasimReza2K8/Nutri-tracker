@@ -176,6 +176,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Eintrag aktualisiert"),
         "kcalLabel": MessageLookupByLibrary.simpleMessage("kcal"),
         "kcalLeftLabel": MessageLookupByLibrary.simpleMessage("kcal übrig"),
+        "kcalOverLabel":
+            MessageLookupByLibrary.simpleMessage("kcal überschritten"),
         "kgLabel": MessageLookupByLibrary.simpleMessage("kg"),
         "lunchExample": MessageLookupByLibrary.simpleMessage(
             "z. B. Pizza, Salat, Reis ..."),

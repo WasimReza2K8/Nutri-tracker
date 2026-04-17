@@ -114,6 +114,7 @@
   "suppliedLabel": "supplied",
   "burnedLabel": "burned",
   "kcalLeftLabel": "kcal left",
+  "kcalOverLabel": "kcal over",
   "nutritionInfoLabel": "Nutrition Information",
   "kcalLabel": "kcal",
   "carbsLabel": "carbs",

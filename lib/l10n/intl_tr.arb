@@ -111,6 +111,7 @@
   "suppliedLabel": "tüketilen",
   "burnedLabel": "yakılan",
   "kcalLeftLabel": "kalan kcal",
+  "kcalOverLabel": "kcal fazla",
   "nutritionInfoLabel": "Beslenme Bilgileri",
   "kcalLabel": "kcal",
   "carbsLabel": "karbonhidrat",

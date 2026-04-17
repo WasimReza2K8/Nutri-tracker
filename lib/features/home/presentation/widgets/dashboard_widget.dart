@@ -38,17 +38,28 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   Widget build(BuildContext context) {
     double kcalLeftLabel = 0;
     double gaugeValue = 0;
+    bool isOver = false;
+
     if (widget.totalKcalLeft > widget.totalKcalDaily) {
       kcalLeftLabel = widget.totalKcalDaily;
       gaugeValue = 0;
     } else if (widget.totalKcalLeft < 0) {
-      kcalLeftLabel = 0;
+      kcalLeftLabel = widget.totalKcalSupplied - widget.totalKcalDaily;
       gaugeValue = 1;
+      isOver = true;
     } else {
       kcalLeftLabel = widget.totalKcalLeft;
       gaugeValue = (widget.totalKcalDaily - widget.totalKcalLeft) /
           widget.totalKcalDaily;
     }
+
+    final gaugeColor = isOver
+        ? Theme.of(context).colorScheme.error
+        : Theme.of(context).colorScheme.primary;
+    final gaugeBackgroundColor = isOver
+        ? Theme.of(context).colorScheme.error.withAlpha(50)
+        : Theme.of(context).colorScheme.primary.withAlpha(50);
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Card(
@@ -90,9 +101,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     animation: true,
                     percent: gaugeValue,
                     arcType: ArcType.FULL,
-                    progressColor: Theme.of(context).colorScheme.primary,
-                    arcBackgroundColor:
-                        Theme.of(context).colorScheme.primary.withAlpha(50),
+                    progressColor: gaugeColor,
+                    arcBackgroundColor: gaugeBackgroundColor,
                     center: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -103,17 +113,21 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                 .textTheme
                                 .headlineMedium
                                 ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
+                                    color: isOver
+                                        ? Theme.of(context).colorScheme.error
+                                        : Theme.of(context).colorScheme.onSurface,
                                     letterSpacing: -1)),
                         Text(
-                          S.of(context).kcalLeftLabel,
+                          isOver
+                              ? S.of(context).kcalOverLabel
+                              : S.of(context).kcalLeftLabel,
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
                               ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
+                                  color: isOver
+                                      ? Theme.of(context).colorScheme.error
+                                      : Theme.of(context).colorScheme.onSurface),
                         )
                       ],
                     ),
