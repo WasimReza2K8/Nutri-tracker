@@ -911,6 +911,16 @@ class S {
     );
   }
 
+  /// `Calorie Tracker`
+  String get calorieTrackerLabel {
+    return Intl.message(
+      'Calorie Tracker',
+      name: 'calorieTrackerLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Activity`
   String get activityLabel {
     return Intl.message(

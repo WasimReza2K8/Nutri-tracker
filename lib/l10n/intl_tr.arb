@@ -85,6 +85,7 @@
   "exportAction": "Dışa Aktar",
   "importAction": "İçe Aktar",
   "addItemLabel": "Yeni Öğe Ekle:",
+  "calorieTrackerLabel": "Kalori Takibi",
   "activityLabel": "Aktivite",
   "activityExample": "ör. koşu, bisiklet, yoga ...",
   "breakfastLabel": "Kahvaltı",

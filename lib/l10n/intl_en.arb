@@ -85,6 +85,7 @@
   "exportAction": "Export",
   "importAction": "Import",
   "addItemLabel": "Add new Item:",
+  "calorieTrackerLabel": "Calorie Tracker",
   "activityLabel": "Activity",
   "activityExample": "e.g. running, biking, yoga ...",
   "breakfastLabel": "Breakfast",
