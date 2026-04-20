@@ -20,6 +20,10 @@ class UserDBO extends HiveObject {
   UserWeightGoalDBO goal;
   @HiveField(5)
   UserPALDBO pal;
+  @HiveField(6)
+  double? targetWeightKG;
+  @HiveField(7)
+  double? weightChangeRateKgPerWeek;
 
   UserDBO(
       {required this.birthday,
@@ -27,7 +31,9 @@ class UserDBO extends HiveObject {
       required this.weightKG,
       required this.gender,
       required this.goal,
-      required this.pal});
+      required this.pal,
+      this.targetWeightKG,
+      this.weightChangeRateKgPerWeek});
 
   factory UserDBO.fromUserEntity(UserEntity entity) {
     return UserDBO(
@@ -36,6 +42,8 @@ class UserDBO extends HiveObject {
         weightKG: entity.weightKG,
         gender: UserGenderDBO.fromUserGenderEntity(entity.gender),
         goal: UserWeightGoalDBO.fromUserWeightGoalEntity(entity.goal),
-        pal: UserPALDBO.fromUserPALEntity(entity.pal));
+        pal: UserPALDBO.fromUserPALEntity(entity.pal),
+        targetWeightKG: entity.targetWeightKG,
+        weightChangeRateKgPerWeek: entity.weightChangeRateKgPerWeek);
   }
 }

@@ -1,16 +1,18 @@
 class MacroCalc {
-  /// Information provided by
-  /// 'OBESITY: PREVENTING AND MANAGING
-  /// THE GLOBAL EPIDEMIC' by WHO page 104
-  /// ISBN 92 4 120894 5
-  /// ISSN 0512-3054
+  /// Atwater energy density factors (kcal per gram)
   static const _carbsKcalPerGram = 4.0;
   static const _fatKcalPerGram = 9.0;
   static const _proteinKcalPerGram = 4.0;
 
-  static const _defaultCarbsPercentageGoal = 0.6;
-  static const _defaultFatsPercentageGoal = 0.25;
-  static const _defaultProteinsPercentageGoal = 0.15;
+  /// Modern default macro split — aligned with USDA Dietary Guidelines
+  /// 2020-2025 and popular apps (Yazio, MyFitnessPal).
+  ///
+  /// Carbs  : 50 %
+  /// Fat    : 30 %
+  /// Protein: 20 %
+  static const _defaultCarbsPercentageGoal = 0.50;
+  static const _defaultFatsPercentageGoal = 0.30;
+  static const _defaultProteinsPercentageGoal = 0.20;
 
   /// Calculate the total carbs goal based on the total calorie goal
   /// Uses the default percentage if the user has not set a goal

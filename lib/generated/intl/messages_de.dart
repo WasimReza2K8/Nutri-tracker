@@ -208,9 +208,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "genderFemaleLabel": MessageLookupByLibrary.simpleMessage("♀ weiblich"),
     "genderLabel": MessageLookupByLibrary.simpleMessage("Geschlecht"),
     "genderMaleLabel": MessageLookupByLibrary.simpleMessage("♂ männlich"),
-    "goalGainWeight": MessageLookupByLibrary.simpleMessage("Gewicht zunehmen"),
+    "goalGainWeight": MessageLookupByLibrary.simpleMessage("Zunehmen"),
     "goalLabel": MessageLookupByLibrary.simpleMessage("Ziel"),
-    "goalLoseWeight": MessageLookupByLibrary.simpleMessage("Gewicht verlieren"),
+    "goalLoseWeight": MessageLookupByLibrary.simpleMessage("Abnehmen"),
     "goalMaintainWeight": MessageLookupByLibrary.simpleMessage(
       "Gewicht halten",
     ),
@@ -356,6 +356,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingSaveUserError": MessageLookupByLibrary.simpleMessage(
       "Falsche Eingabe, bitte versuchen Sie es erneut",
     ),
+    "onboardingStepActivity": MessageLookupByLibrary.simpleMessage(
+      "Aktivitätslevel",
+    ),
+    "onboardingStepBodyMetrics": MessageLookupByLibrary.simpleMessage(
+      "Körpermaße",
+    ),
+    "onboardingStepGenderAge": MessageLookupByLibrary.simpleMessage(
+      "Über dich",
+    ),
+    "onboardingStepGoal": MessageLookupByLibrary.simpleMessage("Dein Ziel"),
+    "onboardingStepGoalDetails": MessageLookupByLibrary.simpleMessage(
+      "Zieldetails",
+    ),
+    "onboardingStepOverview": MessageLookupByLibrary.simpleMessage("Dein Plan"),
+    "onboardingTargetWeightValidationGain":
+        MessageLookupByLibrary.simpleMessage(
+          "Zielgewicht muss über dem aktuellen Gewicht liegen",
+        ),
+    "onboardingTargetWeightValidationLose":
+        MessageLookupByLibrary.simpleMessage(
+          "Zielgewicht muss unter dem aktuellen Gewicht liegen",
+        ),
     "onboardingWeightExampleHintKg": MessageLookupByLibrary.simpleMessage(
       "z. B. 60",
     ),
@@ -367,6 +389,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "onboardingWrongHeightLabel": MessageLookupByLibrary.simpleMessage(
       "Geben Sie eine korrekte Größe ein",
+    ),
+    "onboardingWrongTargetWeightLabel": MessageLookupByLibrary.simpleMessage(
+      "Gültiges Zielgewicht eingeben",
     ),
     "onboardingWrongWeightLabel": MessageLookupByLibrary.simpleMessage(
       "Geben Sie ein korrekte Gewicht ein",
@@ -752,6 +777,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "palVeryActiveLabel": MessageLookupByLibrary.simpleMessage("Sehr aktiv"),
     "per100gmlLabel": MessageLookupByLibrary.simpleMessage("Pro 100 g/ml"),
     "perServingLabel": MessageLookupByLibrary.simpleMessage("Pro Portion"),
+    "perWeekLabel": MessageLookupByLibrary.simpleMessage("pro Woche"),
     "privacyPolicyLabel": MessageLookupByLibrary.simpleMessage(
       "Datenschutzrichtlinie",
     ),
@@ -835,8 +861,48 @@ class MessageLookup extends MessageLookupByLibrary {
     "snackLabel": MessageLookupByLibrary.simpleMessage("Snack"),
     "sugarLabel": MessageLookupByLibrary.simpleMessage("Zucker"),
     "suppliedLabel": MessageLookupByLibrary.simpleMessage("zugeführt"),
+    "targetWeightExampleHintKg": MessageLookupByLibrary.simpleMessage(
+      "z.B. 65",
+    ),
+    "targetWeightExampleHintLbs": MessageLookupByLibrary.simpleMessage(
+      "z.B. 143",
+    ),
+    "targetWeightLabel": MessageLookupByLibrary.simpleMessage("Zielgewicht"),
+    "targetWeightSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Was ist dein Zielgewicht?",
+    ),
     "unitLabel": MessageLookupByLibrary.simpleMessage("Einheit"),
+    "weightChangeRateFast": MessageLookupByLibrary.simpleMessage("Schnell"),
+    "weightChangeRateFastDesc": MessageLookupByLibrary.simpleMessage(
+      "1 kg/Woche",
+    ),
+    "weightChangeRateFastDescLbs": MessageLookupByLibrary.simpleMessage(
+      "2 lbs/Woche",
+    ),
+    "weightChangeRateLabel": MessageLookupByLibrary.simpleMessage(
+      "Wöchentliche Rate",
+    ),
+    "weightChangeRateNormal": MessageLookupByLibrary.simpleMessage("Normal"),
+    "weightChangeRateNormalDesc": MessageLookupByLibrary.simpleMessage(
+      "0,5 kg/Woche",
+    ),
+    "weightChangeRateNormalDescLbs": MessageLookupByLibrary.simpleMessage(
+      "1 lbs/Woche",
+    ),
+    "weightChangeRateSlow": MessageLookupByLibrary.simpleMessage("Langsam"),
+    "weightChangeRateSlowDesc": MessageLookupByLibrary.simpleMessage(
+      "0,25 kg/Woche",
+    ),
+    "weightChangeRateSlowDescLbs": MessageLookupByLibrary.simpleMessage(
+      "0,5 lbs/Woche",
+    ),
+    "weightGainRateSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Wie schnell möchtest du zunehmen?",
+    ),
     "weightLabel": MessageLookupByLibrary.simpleMessage("Gewicht"),
+    "weightLossRateSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Wie schnell möchtest du abnehmen?",
+    ),
     "yearsLabel": m3,
   };
 }

@@ -23,23 +23,27 @@ void main() {
 
       double resultCalorieGoal = CalorieGoalCalc.getTotalKcalGoal(user, 200.0);
 
-      // TDEE: 2662, Activities: 200, Adjustment: + 0
-      // 2662 + 200 + 0 = 2862
-      int expectedKcal = 2862;
+      // Mifflin-St. Jeor BMR: 10*80 + 6.25*180 - 5*25 + 5 = 800+1125-125+5 = 1805
+      // TDEE (sedentary ×1.2): 1805 * 1.2 = 2166
+      // Activities: 200, Adjustment: 0 (maintain)
+      // 2166 + 200 + 0 = 2366
+      int expectedKcal = 2366;
 
       expect(resultCalorieGoal.toInt(), expectedKcal);
     });
 
     test(
-        'Total Kcal Goal calculation for a middle aged sedentary female wanting to maintain weight',
+        'Total Kcal Goal calculation for a middle aged active female wanting to lose weight',
         () {
       final user = middleAgedActiveFemaleWantingToLoseWeight;
 
       double resultCalorieGoal = CalorieGoalCalc.getTotalKcalGoal(user, 550.0);
 
-      // TDEE: 2087, Activities: 550, Adjustment: -500
-      // 2087 + 550 - 500 = 2137
-      int expectedKcal = 2137;
+      // Mifflin-St. Jeor BMR: 10*75 + 6.25*160 - 5*54 - 161 = 750+1000-270-161 = 1319
+      // TDEE (active ×1.55): 1319 * 1.55 = 2044.45
+      // Activities: 550, Adjustment: -550 (default 0.5 kg/week lose)
+      // 2044 + 550 - 550 = 2044
+      int expectedKcal = 2044;
 
       expect(resultCalorieGoal.toInt(), expectedKcal);
     });

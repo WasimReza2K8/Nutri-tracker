@@ -9,6 +9,7 @@ import 'package:opennutritracker/features/onboarding/domain/entity/user_goal_sel
 import 'package:opennutritracker/features/onboarding/presentation/bloc/onboarding_bloc.dart';
 import 'package:opennutritracker/features/onboarding/presentation/onboarding_intro_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_fourth_page_body.dart';
+import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_goal_details_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_overview_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_third_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/highlight_button.dart';
@@ -37,7 +38,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool _secondPageButtonActive = false;
   bool _thirdPageButtonActive = false;
   bool _fourthPageButtonActive = false;
+  bool _goalDetailsPageButtonActive = false;
   bool _overviewPageButtonActive = false;
+
+  bool _needsGoalDetails = false;
 
   @override
   void initState() {
@@ -93,106 +97,130 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         pages: _getPageViewModels());
   }
 
-  List<PageViewModel> _getPageViewModels() => <PageViewModel>[
-        PageViewModel(
-            title: S.of(context).onboardingWelcomeLabel,
-            decoration: _pageDecoration,
-            image: _defaultImageWidget,
-            bodyWidget: OnboardingIntroPageBody(
-              setPageContent: _setIntroPageData,
-            ),
-            footer: HighlightButton(
-              buttonLabel: S.of(context).buttonStartLabel,
-              onButtonPressed: () => _scrollToPage(1),
-              buttonActive: _introPageButtonActive,
-            )),
-        PageViewModel(
-            titleWidget: const SizedBox(),
-            // empty
-            decoration: _pageDecoration,
-            image: _defaultImageWidget,
-            bodyWidget: OnboardingFirstPageBody(
-              setPageContent: _setFirstPageData,
-            ),
-            footer: HighlightButton(
-              buttonLabel: S.of(context).buttonNextLabel,
-              onButtonPressed: () => _scrollToPage(2),
-              buttonActive: _firstPageButtonActive,
-            )),
-        PageViewModel(
-            titleWidget: const SizedBox(),
-            // empty
-            decoration: _pageDecoration,
-            image: _defaultImageWidget,
-            bodyWidget: OnboardingSecondPageBody(
-              setButtonContent: _setSecondPageData,
-            ),
-            footer: HighlightButton(
-              buttonLabel: S.of(context).buttonNextLabel,
-              onButtonPressed: () => _scrollToPage(3),
-              buttonActive: _secondPageButtonActive,
-            )),
-        PageViewModel(
-            titleWidget: const SizedBox(),
-            // empty
-            decoration: _pageDecoration,
-            image: _defaultImageWidget,
-            bodyWidget: OnboardingThirdPageBody(
-              setButtonContent: _setThirdPageButton,
-            ),
-            footer: HighlightButton(
-              buttonLabel: S.of(context).buttonNextLabel,
-              onButtonPressed: () => _scrollToPage(4),
-              buttonActive: _thirdPageButtonActive,
-            )),
-        PageViewModel(
-            titleWidget: const SizedBox(),
-            // empty
-            decoration: _pageDecoration,
-            image: _defaultImageWidget,
-            bodyWidget: OnboardingFourthPageBody(
-              setButtonContent: _setFourthPageButton,
-            ),
-            footer: HighlightButton(
-              buttonLabel: S.of(context).buttonNextLabel,
-              onButtonPressed: () => _scrollToPage(5),
-              buttonActive: _fourthPageButtonActive,
-            )),
-        PageViewModel(
-            titleWidget: const SizedBox(),
-            // empty
-            decoration: _pageDecoration,
-            image: _defaultImageWidget,
-            bodyWidget: OnboardingOverviewPageBody(
-              calorieGoalDayString: _onboardingBloc
-                      .getOverviewCalorieGoal()
-                      ?.toInt()
-                      .toString() ??
+  int get _overviewPageIndex => _needsGoalDetails ? 6 : 5;
+
+  List<PageViewModel> _getPageViewModels() {
+    final pages = <PageViewModel>[
+      // Page 0: Intro
+      PageViewModel(
+          title: S.of(context).onboardingWelcomeLabel,
+          decoration: _pageDecoration,
+          image: _defaultImageWidget,
+          bodyWidget: OnboardingIntroPageBody(
+            setPageContent: _setIntroPageData,
+          ),
+          footer: HighlightButton(
+            buttonLabel: S.of(context).buttonStartLabel,
+            onButtonPressed: () => _scrollToPage(1),
+            buttonActive: _introPageButtonActive,
+          )),
+      // Page 1: Gender & Age
+      PageViewModel(
+          titleWidget: const SizedBox(),
+          decoration: _pageDecoration,
+          image: _defaultImageWidget,
+          bodyWidget: OnboardingFirstPageBody(
+            setPageContent: _setFirstPageData,
+          ),
+          footer: HighlightButton(
+            buttonLabel: S.of(context).buttonNextLabel,
+            onButtonPressed: () => _scrollToPage(2),
+            buttonActive: _firstPageButtonActive,
+          )),
+      // Page 2: Height & Weight
+      PageViewModel(
+          titleWidget: const SizedBox(),
+          decoration: _pageDecoration,
+          image: _defaultImageWidget,
+          bodyWidget: OnboardingSecondPageBody(
+            setButtonContent: _setSecondPageData,
+          ),
+          footer: HighlightButton(
+            buttonLabel: S.of(context).buttonNextLabel,
+            onButtonPressed: () => _scrollToPage(3),
+            buttonActive: _secondPageButtonActive,
+          )),
+      // Page 3: Activity Level
+      PageViewModel(
+          titleWidget: const SizedBox(),
+          decoration: _pageDecoration,
+          image: _defaultImageWidget,
+          bodyWidget: OnboardingThirdPageBody(
+            setButtonContent: _setThirdPageButton,
+          ),
+          footer: HighlightButton(
+            buttonLabel: S.of(context).buttonNextLabel,
+            onButtonPressed: () => _scrollToPage(4),
+            buttonActive: _thirdPageButtonActive,
+          )),
+      // Page 4: Goal Selection
+      PageViewModel(
+          titleWidget: const SizedBox(),
+          decoration: _pageDecoration,
+          image: _defaultImageWidget,
+          bodyWidget: OnboardingFourthPageBody(
+            setButtonContent: _setFourthPageButton,
+          ),
+          footer: HighlightButton(
+            buttonLabel: S.of(context).buttonNextLabel,
+            onButtonPressed: () => _scrollToPage(5),
+            buttonActive: _fourthPageButtonActive,
+          )),
+    ];
+
+    // Page 5 (conditional): Goal Details
+    if (_needsGoalDetails) {
+      pages.add(PageViewModel(
+          titleWidget: const SizedBox(),
+          decoration: _pageDecoration,
+          image: _defaultImageWidget,
+          bodyWidget: OnboardingGoalDetailsPageBody(
+            goal: _onboardingBloc.userSelection.goal ??
+                UserGoalSelectionEntity.loseWeight,
+            currentWeightKG: _onboardingBloc.userSelection.weight ?? 70,
+            usesImperialUnits: _onboardingBloc.userSelection.usesImperialUnits,
+            setButtonContent: _setGoalDetailsPageData,
+          ),
+          footer: HighlightButton(
+            buttonLabel: S.of(context).buttonNextLabel,
+            onButtonPressed: () => _scrollToPage(_overviewPageIndex),
+            buttonActive: _goalDetailsPageButtonActive,
+          )));
+    }
+
+    // Overview page (last)
+    pages.add(PageViewModel(
+        titleWidget: const SizedBox(),
+        decoration: _pageDecoration,
+        image: _defaultImageWidget,
+        bodyWidget: OnboardingOverviewPageBody(
+          calorieGoalDayString: _onboardingBloc
+                  .getOverviewCalorieGoal()
+                  ?.toInt()
+                  .toString() ??
+              "?",
+          carbsGoalString:
+              _onboardingBloc.getOverviewCarbsGoal()?.toInt().toString() ?? "?",
+          fatGoalString:
+              _onboardingBloc.getOverviewFatGoal()?.toInt().toString() ?? "?",
+          proteinGoalString:
+              _onboardingBloc.getOverviewProteinGoal()?.toInt().toString() ??
                   "?",
-              carbsGoalString:
-                  _onboardingBloc.getOverviewCarbsGoal()?.toInt().toString() ??
-                      "?",
-              fatGoalString:
-                  _onboardingBloc.getOverviewFatGoal()?.toInt().toString() ??
-                      "?",
-              proteinGoalString: _onboardingBloc
-                      .getOverviewProteinGoal()
-                      ?.toInt()
-                      .toString() ??
-                  "?",
-              setButtonActive: _setOverviewPageContent,
-            ),
-            footer: HighlightButton(
-              buttonLabel: S.of(context).buttonStartLabel,
-              onButtonPressed: () {
-                _onOverviewStartButtonPressed(context);
-              },
-              buttonActive: _overviewPageButtonActive,
-            )),
-      ];
+          setButtonActive: _setOverviewPageContent,
+        ),
+        footer: HighlightButton(
+          buttonLabel: S.of(context).buttonStartLabel,
+          onButtonPressed: () {
+            _onOverviewStartButtonPressed(context);
+          },
+          buttonActive: _overviewPageButtonActive,
+        )));
+
+    return pages;
+  }
 
   void _scrollToPage(int page) {
-    FocusScope.of(context).requestFocus(FocusNode()); // Dismiss Keyboard
+    FocusScope.of(context).requestFocus(FocusNode());
     _introKey.currentState?.animateScroll(page);
   }
 
@@ -200,7 +228,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {
       _onboardingBloc.userSelection.acceptDataCollection =
           acceptedDataCollection;
-
       _introPageButtonActive = active;
     });
   }
@@ -210,7 +237,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {
       _onboardingBloc.userSelection.gender = selectedGender;
       _onboardingBloc.userSelection.birthday = selectedBirthday;
-
       _firstPageButtonActive = active;
     });
   }
@@ -221,7 +247,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _onboardingBloc.userSelection.height = selectedHeight;
       _onboardingBloc.userSelection.weight = selectedWeight;
       _onboardingBloc.userSelection.usesImperialUnits = usesImperial;
-
       _secondPageButtonActive = active;
     });
   }
@@ -230,7 +255,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       bool active, UserActivitySelectionEntity? selectedActivity) {
     setState(() {
       _onboardingBloc.userSelection.activity = selectedActivity;
-
       _thirdPageButtonActive = active;
     });
   }
@@ -239,8 +263,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       bool active, UserGoalSelectionEntity? selectedGoal) {
     setState(() {
       _onboardingBloc.userSelection.goal = selectedGoal;
-
       _fourthPageButtonActive = active;
+
+      final needsDetails =
+          selectedGoal == UserGoalSelectionEntity.loseWeight ||
+              selectedGoal == UserGoalSelectionEntity.gainWeigh;
+
+      if (needsDetails != _needsGoalDetails) {
+        _needsGoalDetails = needsDetails;
+        if (!needsDetails) {
+          _onboardingBloc.userSelection.targetWeight = null;
+          _onboardingBloc.userSelection.weightChangeRateKgPerWeek = null;
+          _goalDetailsPageButtonActive = false;
+        }
+      }
+    });
+  }
+
+  void _setGoalDetailsPageData(
+      bool active, double? targetWeight, double? weightChangeRateKgPerWeek) {
+    setState(() {
+      _onboardingBloc.userSelection.targetWeight = targetWeight;
+      _onboardingBloc.userSelection.weightChangeRateKgPerWeek =
+          weightChangeRateKgPerWeek;
+      _goalDetailsPageButtonActive = active;
     });
   }
 
@@ -270,7 +316,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           context, userEntity, hasAcceptedDataCollection, usesImperialUnits);
       Navigator.pushReplacementNamed(context, NavigationOptions.mainRoute);
     } else {
-      // Error with user input
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(S.of(context).onboardingSaveUserError)));
       _scrollToPage(1);

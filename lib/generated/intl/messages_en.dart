@@ -342,6 +342,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingSaveUserError": MessageLookupByLibrary.simpleMessage(
       "Wrong input, please try again",
     ),
+    "onboardingStepActivity": MessageLookupByLibrary.simpleMessage(
+      "Activity Level",
+    ),
+    "onboardingStepBodyMetrics": MessageLookupByLibrary.simpleMessage(
+      "Body Metrics",
+    ),
+    "onboardingStepGenderAge": MessageLookupByLibrary.simpleMessage(
+      "About You",
+    ),
+    "onboardingStepGoal": MessageLookupByLibrary.simpleMessage("Your Goal"),
+    "onboardingStepGoalDetails": MessageLookupByLibrary.simpleMessage(
+      "Goal Details",
+    ),
+    "onboardingStepOverview": MessageLookupByLibrary.simpleMessage("Your Plan"),
+    "onboardingTargetWeightValidationGain":
+        MessageLookupByLibrary.simpleMessage(
+          "Target weight must be more than current weight",
+        ),
+    "onboardingTargetWeightValidationLose":
+        MessageLookupByLibrary.simpleMessage(
+          "Target weight must be less than current weight",
+        ),
     "onboardingWeightExampleHintKg": MessageLookupByLibrary.simpleMessage(
       "e.g. 60",
     ),
@@ -356,6 +378,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "onboardingWrongHeightLabel": MessageLookupByLibrary.simpleMessage(
       "Enter correct height",
+    ),
+    "onboardingWrongTargetWeightLabel": MessageLookupByLibrary.simpleMessage(
+      "Enter a valid target weight",
     ),
     "onboardingWrongWeightLabel": MessageLookupByLibrary.simpleMessage(
       "Enter correct weight",
@@ -728,6 +753,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "palVeryActiveLabel": MessageLookupByLibrary.simpleMessage("Very Active"),
     "per100gmlLabel": MessageLookupByLibrary.simpleMessage("Per 100g/ml"),
     "perServingLabel": MessageLookupByLibrary.simpleMessage("Per Serving"),
+    "perWeekLabel": MessageLookupByLibrary.simpleMessage("per week"),
     "privacyPolicyLabel": MessageLookupByLibrary.simpleMessage(
       "Privacy policy",
     ),
@@ -818,8 +844,48 @@ class MessageLookup extends MessageLookupByLibrary {
     "snackLabel": MessageLookupByLibrary.simpleMessage("Snack"),
     "sugarLabel": MessageLookupByLibrary.simpleMessage("sugar"),
     "suppliedLabel": MessageLookupByLibrary.simpleMessage("supplied"),
+    "targetWeightExampleHintKg": MessageLookupByLibrary.simpleMessage(
+      "e.g. 65",
+    ),
+    "targetWeightExampleHintLbs": MessageLookupByLibrary.simpleMessage(
+      "e.g. 143",
+    ),
+    "targetWeightLabel": MessageLookupByLibrary.simpleMessage("Target Weight"),
+    "targetWeightSubtitle": MessageLookupByLibrary.simpleMessage(
+      "What is your target weight?",
+    ),
     "unitLabel": MessageLookupByLibrary.simpleMessage("Unit"),
+    "weightChangeRateFast": MessageLookupByLibrary.simpleMessage("Fast"),
+    "weightChangeRateFastDesc": MessageLookupByLibrary.simpleMessage(
+      "1 kg/week",
+    ),
+    "weightChangeRateFastDescLbs": MessageLookupByLibrary.simpleMessage(
+      "2 lbs/week",
+    ),
+    "weightChangeRateLabel": MessageLookupByLibrary.simpleMessage(
+      "Weekly Rate",
+    ),
+    "weightChangeRateNormal": MessageLookupByLibrary.simpleMessage("Normal"),
+    "weightChangeRateNormalDesc": MessageLookupByLibrary.simpleMessage(
+      "0.5 kg/week",
+    ),
+    "weightChangeRateNormalDescLbs": MessageLookupByLibrary.simpleMessage(
+      "1 lbs/week",
+    ),
+    "weightChangeRateSlow": MessageLookupByLibrary.simpleMessage("Slow"),
+    "weightChangeRateSlowDesc": MessageLookupByLibrary.simpleMessage(
+      "0.25 kg/week",
+    ),
+    "weightChangeRateSlowDescLbs": MessageLookupByLibrary.simpleMessage(
+      "0.5 lbs/week",
+    ),
+    "weightGainRateSubtitle": MessageLookupByLibrary.simpleMessage(
+      "How fast do you want to gain weight?",
+    ),
     "weightLabel": MessageLookupByLibrary.simpleMessage("Weight"),
+    "weightLossRateSubtitle": MessageLookupByLibrary.simpleMessage(
+      "How fast do you want to lose weight?",
+    ),
     "yearsLabel": m3,
   };
 }

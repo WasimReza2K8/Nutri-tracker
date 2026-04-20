@@ -13,6 +13,8 @@ class UserDataMaskEntity {
   double? weight;
   UserActivitySelectionEntity? activity;
   UserGoalSelectionEntity? goal;
+  double? targetWeight;
+  double? weightChangeRateKgPerWeek;
 
   bool acceptDataCollection = false;
 
@@ -25,6 +27,8 @@ class UserDataMaskEntity {
       this.weight,
       this.activity,
       this.goal,
+      this.targetWeight,
+      this.weightChangeRateKgPerWeek,
       this.acceptDataCollection = false,
       this.usesImperialUnits = false});
 
@@ -35,6 +39,11 @@ class UserDataMaskEntity {
         weight != null &&
         activity != null &&
         goal != null) {
+      // For lose/gain, require target weight and rate
+      if (goal == UserGoalSelectionEntity.loseWeight ||
+          goal == UserGoalSelectionEntity.gainWeigh) {
+        return targetWeight != null && weightChangeRateKgPerWeek != null;
+      }
       return true;
     } else {
       return false;
@@ -92,6 +101,8 @@ class UserDataMaskEntity {
         weightKG: userWeight,
         gender: userGender,
         goal: userGoal,
-        pal: userPal);
+        pal: userPal,
+        targetWeightKG: targetWeight,
+        weightChangeRateKgPerWeek: weightChangeRateKgPerWeek);
   }
 }

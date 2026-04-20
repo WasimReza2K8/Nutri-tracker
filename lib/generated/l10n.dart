@@ -1598,6 +1598,261 @@ class S {
     return Intl.message('Goal', name: 'goalLabel', desc: '', args: []);
   }
 
+  /// `Target Weight`
+  String get targetWeightLabel {
+    return Intl.message(
+      'Target Weight',
+      name: 'targetWeightLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What is your target weight?`
+  String get targetWeightSubtitle {
+    return Intl.message(
+      'What is your target weight?',
+      name: 'targetWeightSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weekly Rate`
+  String get weightChangeRateLabel {
+    return Intl.message(
+      'Weekly Rate',
+      name: 'weightChangeRateLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How fast do you want to lose weight?`
+  String get weightLossRateSubtitle {
+    return Intl.message(
+      'How fast do you want to lose weight?',
+      name: 'weightLossRateSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How fast do you want to gain weight?`
+  String get weightGainRateSubtitle {
+    return Intl.message(
+      'How fast do you want to gain weight?',
+      name: 'weightGainRateSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Slow`
+  String get weightChangeRateSlow {
+    return Intl.message(
+      'Slow',
+      name: 'weightChangeRateSlow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Normal`
+  String get weightChangeRateNormal {
+    return Intl.message(
+      'Normal',
+      name: 'weightChangeRateNormal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fast`
+  String get weightChangeRateFast {
+    return Intl.message(
+      'Fast',
+      name: 'weightChangeRateFast',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `0.25 kg/week`
+  String get weightChangeRateSlowDesc {
+    return Intl.message(
+      '0.25 kg/week',
+      name: 'weightChangeRateSlowDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `0.5 kg/week`
+  String get weightChangeRateNormalDesc {
+    return Intl.message(
+      '0.5 kg/week',
+      name: 'weightChangeRateNormalDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 kg/week`
+  String get weightChangeRateFastDesc {
+    return Intl.message(
+      '1 kg/week',
+      name: 'weightChangeRateFastDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `0.5 lbs/week`
+  String get weightChangeRateSlowDescLbs {
+    return Intl.message(
+      '0.5 lbs/week',
+      name: 'weightChangeRateSlowDescLbs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 lbs/week`
+  String get weightChangeRateNormalDescLbs {
+    return Intl.message(
+      '1 lbs/week',
+      name: 'weightChangeRateNormalDescLbs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `2 lbs/week`
+  String get weightChangeRateFastDescLbs {
+    return Intl.message(
+      '2 lbs/week',
+      name: 'weightChangeRateFastDescLbs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `e.g. 65`
+  String get targetWeightExampleHintKg {
+    return Intl.message(
+      'e.g. 65',
+      name: 'targetWeightExampleHintKg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `e.g. 143`
+  String get targetWeightExampleHintLbs {
+    return Intl.message(
+      'e.g. 143',
+      name: 'targetWeightExampleHintLbs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid target weight`
+  String get onboardingWrongTargetWeightLabel {
+    return Intl.message(
+      'Enter a valid target weight',
+      name: 'onboardingWrongTargetWeightLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Target weight must be less than current weight`
+  String get onboardingTargetWeightValidationLose {
+    return Intl.message(
+      'Target weight must be less than current weight',
+      name: 'onboardingTargetWeightValidationLose',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Target weight must be more than current weight`
+  String get onboardingTargetWeightValidationGain {
+    return Intl.message(
+      'Target weight must be more than current weight',
+      name: 'onboardingTargetWeightValidationGain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `per week`
+  String get perWeekLabel {
+    return Intl.message('per week', name: 'perWeekLabel', desc: '', args: []);
+  }
+
+  /// `About You`
+  String get onboardingStepGenderAge {
+    return Intl.message(
+      'About You',
+      name: 'onboardingStepGenderAge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Body Metrics`
+  String get onboardingStepBodyMetrics {
+    return Intl.message(
+      'Body Metrics',
+      name: 'onboardingStepBodyMetrics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activity Level`
+  String get onboardingStepActivity {
+    return Intl.message(
+      'Activity Level',
+      name: 'onboardingStepActivity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Goal`
+  String get onboardingStepGoal {
+    return Intl.message(
+      'Your Goal',
+      name: 'onboardingStepGoal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Goal Details`
+  String get onboardingStepGoalDetails {
+    return Intl.message(
+      'Goal Details',
+      name: 'onboardingStepGoalDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your Plan`
+  String get onboardingStepOverview {
+    return Intl.message(
+      'Your Plan',
+      name: 'onboardingStepOverview',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Select Height`
   String get selectHeightDialogLabel {
     return Intl.message(

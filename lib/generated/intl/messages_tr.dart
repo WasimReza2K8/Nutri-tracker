@@ -349,6 +349,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "onboardingSaveUserError": MessageLookupByLibrary.simpleMessage(
       "Yanlış giriş, lütfen tekrar deneyin",
     ),
+    "onboardingStepActivity": MessageLookupByLibrary.simpleMessage(
+      "Aktivite Düzeyi",
+    ),
+    "onboardingStepBodyMetrics": MessageLookupByLibrary.simpleMessage(
+      "Vücut Ölçüleri",
+    ),
+    "onboardingStepGenderAge": MessageLookupByLibrary.simpleMessage(
+      "Hakkınızda",
+    ),
+    "onboardingStepGoal": MessageLookupByLibrary.simpleMessage("Hedefiniz"),
+    "onboardingStepGoalDetails": MessageLookupByLibrary.simpleMessage(
+      "Hedef Detayları",
+    ),
+    "onboardingStepOverview": MessageLookupByLibrary.simpleMessage("Planınız"),
+    "onboardingTargetWeightValidationGain":
+        MessageLookupByLibrary.simpleMessage(
+          "Hedef kilo mevcut kilodan fazla olmalıdır",
+        ),
+    "onboardingTargetWeightValidationLose":
+        MessageLookupByLibrary.simpleMessage(
+          "Hedef kilo mevcut kilodan az olmalıdır",
+        ),
     "onboardingWeightExampleHintKg": MessageLookupByLibrary.simpleMessage(
       "ör. 60",
     ),
@@ -363,6 +385,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "onboardingWrongHeightLabel": MessageLookupByLibrary.simpleMessage(
       "Doğru boy girin",
+    ),
+    "onboardingWrongTargetWeightLabel": MessageLookupByLibrary.simpleMessage(
+      "Geçerli bir hedef kilo girin",
     ),
     "onboardingWrongWeightLabel": MessageLookupByLibrary.simpleMessage(
       "Doğru kilo girin",
@@ -723,6 +748,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "palVeryActiveLabel": MessageLookupByLibrary.simpleMessage("Çok Aktif"),
     "per100gmlLabel": MessageLookupByLibrary.simpleMessage("100g/ml başına"),
     "perServingLabel": MessageLookupByLibrary.simpleMessage("Porsiyon Başına"),
+    "perWeekLabel": MessageLookupByLibrary.simpleMessage("haftalık"),
     "privacyPolicyLabel": MessageLookupByLibrary.simpleMessage(
       "Gizlilik politikası",
     ),
@@ -817,8 +843,46 @@ class MessageLookup extends MessageLookupByLibrary {
     "snackLabel": MessageLookupByLibrary.simpleMessage("Atıştırmalık"),
     "sugarLabel": MessageLookupByLibrary.simpleMessage("şeker"),
     "suppliedLabel": MessageLookupByLibrary.simpleMessage("tüketilen"),
+    "targetWeightExampleHintKg": MessageLookupByLibrary.simpleMessage("ör. 65"),
+    "targetWeightExampleHintLbs": MessageLookupByLibrary.simpleMessage(
+      "ör. 143",
+    ),
+    "targetWeightLabel": MessageLookupByLibrary.simpleMessage("Hedef Kilo"),
+    "targetWeightSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Hedef kilonuz nedir?",
+    ),
     "unitLabel": MessageLookupByLibrary.simpleMessage("Birim"),
+    "weightChangeRateFast": MessageLookupByLibrary.simpleMessage("Hızlı"),
+    "weightChangeRateFastDesc": MessageLookupByLibrary.simpleMessage(
+      "1 kg/hafta",
+    ),
+    "weightChangeRateFastDescLbs": MessageLookupByLibrary.simpleMessage(
+      "2 lbs/hafta",
+    ),
+    "weightChangeRateLabel": MessageLookupByLibrary.simpleMessage(
+      "Haftalık Oran",
+    ),
+    "weightChangeRateNormal": MessageLookupByLibrary.simpleMessage("Normal"),
+    "weightChangeRateNormalDesc": MessageLookupByLibrary.simpleMessage(
+      "0.5 kg/hafta",
+    ),
+    "weightChangeRateNormalDescLbs": MessageLookupByLibrary.simpleMessage(
+      "1 lbs/hafta",
+    ),
+    "weightChangeRateSlow": MessageLookupByLibrary.simpleMessage("Yavaş"),
+    "weightChangeRateSlowDesc": MessageLookupByLibrary.simpleMessage(
+      "0.25 kg/hafta",
+    ),
+    "weightChangeRateSlowDescLbs": MessageLookupByLibrary.simpleMessage(
+      "0.5 lbs/hafta",
+    ),
+    "weightGainRateSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Ne kadar hızlı kilo almak istiyorsunuz?",
+    ),
     "weightLabel": MessageLookupByLibrary.simpleMessage("Kilo"),
+    "weightLossRateSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Ne kadar hızlı kilo vermek istiyorsunuz?",
+    ),
     "yearsLabel": m3,
   };
 }
