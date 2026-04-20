@@ -78,94 +78,111 @@ class _OnboardingGoalDetailsPageBodyState
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return SingleChildScrollView(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section icon + title
-          Icon(
-            _isLoseWeight
-                ? Icons.trending_down_rounded
-                : Icons.trending_up_rounded,
-            size: 48,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          const SizedBox(height: 8),
-          Text(S.of(context).onboardingStepGoalDetails,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 24),
-
-          // Target weight input
-          Text(S.of(context).targetWeightLabel,
-              style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 4),
-          Text(S.of(context).targetWeightSubtitle,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.6))),
-          const SizedBox(height: 12),
-          Form(
-            key: _targetWeightFormKey,
-            child: TextFormField(
-              controller: _targetWeightController,
-              onChanged: (text) {
-                if (_targetWeightFormKey.currentState!.validate()) {
-                  final parsed = double.tryParse(text.replaceAll(',', '.'));
-                  if (parsed != null && widget.usesImperialUnits) {
-                    _parsedTargetWeight = parsed * 0.453592; // lbs → kg
-                  } else {
-                    _parsedTargetWeight = parsed;
-                  }
-                  _checkCorrectInput();
-                } else {
-                  _parsedTargetWeight = null;
-                  _checkCorrectInput();
-                }
-              },
-              validator: _validateTargetWeight,
-              decoration: InputDecoration(
-                labelText: widget.usesImperialUnits
-                    ? S.of(context).lbsLabel
-                    : S.of(context).kgLabel,
-                hintText: widget.usesImperialUnits
-                    ? S.of(context).targetWeightExampleHintLbs
-                    : S.of(context).targetWeightExampleHintKg,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                prefixIcon:
-                    const Icon(Icons.monitor_weight_outlined),
+          Row(
+            children: [
+              Icon(
+                _isLoseWeight
+                    ? Icons.trending_down_rounded
+                    : Icons.trending_up_rounded,
+                size: 34,
+                color: Theme.of(context).colorScheme.primary,
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(S.of(context).onboardingStepGoalDetails,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.w700)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          _buildSectionCard(
+            context,
+            title: S.of(context).targetWeightLabel,
+            subtitle: S.of(context).targetWeightSubtitle,
+            child: Form(
+              key: _targetWeightFormKey,
+              child: TextFormField(
+                controller: _targetWeightController,
+                onChanged: (text) {
+                  if (_targetWeightFormKey.currentState!.validate()) {
+                    final parsed = double.tryParse(text.replaceAll(',', '.'));
+                    if (parsed != null && widget.usesImperialUnits) {
+                      _parsedTargetWeight = parsed * 0.453592; // lbs → kg
+                    } else {
+                      _parsedTargetWeight = parsed;
+                    }
+                    _checkCorrectInput();
+                  } else {
+                    _parsedTargetWeight = null;
+                    _checkCorrectInput();
+                  }
+                },
+                validator: _validateTargetWeight,
+                decoration: InputDecoration(
+                  labelText: widget.usesImperialUnits
+                      ? S.of(context).lbsLabel
+                      : S.of(context).kgLabel,
+                  hintText: widget.usesImperialUnits
+                      ? S.of(context).targetWeightExampleHintLbs
+                      : S.of(context).targetWeightExampleHintKg,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.monitor_weight_outlined),
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
             ),
           ),
+          const SizedBox(height: 14),
+          _buildSectionCard(
+            context,
+            title: S.of(context).weightChangeRateLabel,
+            subtitle: _isLoseWeight
+                ? S.of(context).weightLossRateSubtitle
+                : S.of(context).weightGainRateSubtitle,
+            child: _buildRateCards(context),
+          ),
+        ],
+      ),
+    );
+  }
 
-          const SizedBox(height: 32),
-
-          // Weight change rate selection
-          Text(S.of(context).weightChangeRateLabel,
-              style: Theme.of(context).textTheme.titleLarge),
+  Widget _buildSectionCard(BuildContext context,
+      {required String title,
+      required String subtitle,
+      required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 4),
           Text(
-              _isLoseWeight
-                  ? S.of(context).weightLossRateSubtitle
-                  : S.of(context).weightGainRateSubtitle,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.6))),
-          const SizedBox(height: 16),
-          _buildRateCards(context),
+            subtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 14),
+          child,
         ],
       ),
     );

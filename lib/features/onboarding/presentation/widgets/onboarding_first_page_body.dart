@@ -63,61 +63,155 @@ class _OnboardingFirstPageBodyState extends State<OnboardingFirstPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
+    return SingleChildScrollView(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(S.of(context).genderLabel,
-              style: Theme.of(context).textTheme.headlineSmall),
-          Text(S.of(context).onboardingGenderQuestionSubtitle,
-              style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 16.0),
-          ChoiceChip(
-            label: Text(S.of(context).genderMaleLabel),
-            selected: _maleSelected,
-            onSelected: (bool selected) {
-              setState(() {
-                _maleSelected = true;
-                _femaleSelected = false;
-                checkCorrectInput();
-              });
-            },
-          ),
-          ChoiceChip(
-            label: Text(S.of(context).genderFemaleLabel),
-            selected: _femaleSelected,
-            onSelected: (bool selected) {
-              setState(() {
-                _maleSelected = false;
-                _femaleSelected = true;
-                checkCorrectInput();
-              });
-            },
-          ),
-          const SizedBox(height: 32.0),
-          Text(S.of(context).ageLabel,
-              style: Theme.of(context).textTheme.headlineSmall),
-          Text(S.of(context).onboardingBirthdayQuestionSubtitle,
-              style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 16.0),
-          TextFormField(
-            controller: _dateInput,
-            readOnly: true,
-            decoration: InputDecoration(
-              hintText: S.of(context).onboardingEnterBirthdayLabel,
-              labelText: S.of(context).onboardingEnterBirthdayLabel,
-              prefixIcon: const Icon(Icons.calendar_month_outlined),
-              //fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+          Text(S.of(context).onboardingStepGenderAge,
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.w700)),
+          const SizedBox(height: 18),
+          _buildSectionCard(
+            context,
+            title: S.of(context).genderLabel,
+            subtitle: S.of(context).onboardingGenderQuestionSubtitle,
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildGenderOption(
+                    context,
+                    label: S.of(context).genderMaleLabel,
+                    icon: Icons.male_rounded,
+                    selected: _maleSelected,
+                    onTap: () {
+                      setState(() {
+                        _maleSelected = true;
+                        _femaleSelected = false;
+                        checkCorrectInput();
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _buildGenderOption(
+                    context,
+                    label: S.of(context).genderFemaleLabel,
+                    icon: Icons.female_rounded,
+                    selected: _femaleSelected,
+                    onTap: () {
+                      setState(() {
+                        _maleSelected = false;
+                        _femaleSelected = true;
+                        checkCorrectInput();
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
-            onTap: onDateInputClicked,
+          ),
+          const SizedBox(height: 14),
+          _buildSectionCard(
+            context,
+            title: S.of(context).ageLabel,
+            subtitle: S.of(context).onboardingBirthdayQuestionSubtitle,
+            child: TextFormField(
+              controller: _dateInput,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: S.of(context).onboardingEnterBirthdayLabel,
+                labelText: S.of(context).onboardingEnterBirthdayLabel,
+                prefixIcon: const Icon(Icons.calendar_month_outlined),
+                suffixIcon: const Icon(Icons.chevron_right_rounded),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onTap: onDateInputClicked,
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSectionCard(BuildContext context,
+      {required String title,
+      required String subtitle,
+      required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: 14),
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGenderOption(BuildContext context,
+      {required String label,
+      required IconData icon,
+      required bool selected,
+      required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: selected
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.14)
+              : Theme.of(context).colorScheme.surfaceContainerHighest,
+          border: Border.all(
+            color: selected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.25),
+            width: selected ? 2 : 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(icon,
+                color: selected
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.onSurfaceVariant),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: selected
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
+                    fontWeight:
+                        selected ? FontWeight.w700 : FontWeight.w500,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -125,11 +219,11 @@ class _OnboardingFirstPageBodyState extends State<OnboardingFirstPageBody> {
   void onDateInputClicked() async {
     final pickedDate = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        initialDate: _selectedDate ?? DateTime.now(),
         firstDate: DateTime(1900),
-        lastDate: DateTime(2100));
+        lastDate: DateTime.now());
     if (pickedDate != null) {
-      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      final formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
       setState(() {
         _selectedDate = pickedDate;
         _dateInput.text = formattedDate;

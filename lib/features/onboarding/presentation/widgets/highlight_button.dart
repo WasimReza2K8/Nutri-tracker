@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class HighlightButton extends StatefulWidget {
+class HighlightButton extends StatelessWidget {
   final String buttonLabel;
   final VoidCallback onButtonPressed;
   final bool buttonActive;
@@ -12,23 +12,46 @@ class HighlightButton extends StatefulWidget {
       required this.buttonActive});
 
   @override
-  State<HighlightButton> createState() => _HighlightButtonState();
-}
-
-class _HighlightButtonState extends State<HighlightButton> {
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      child: ElevatedButton.icon(
-          onPressed: widget.buttonActive ? widget.onButtonPressed : null,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutCubic,
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      child: SizedBox(
+        width: double.infinity,
+        height: 52,
+        child: ElevatedButton.icon(
+          onPressed: buttonActive ? onButtonPressed : null,
           style: ElevatedButton.styleFrom(
-            foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
-          icon: const Icon(Icons.navigate_next_outlined),
-          label: Text(widget.buttonLabel,
-              style: Theme.of(context).textTheme.labelLarge)),
+            foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+            disabledBackgroundColor:
+                Theme.of(context).colorScheme.surfaceContainerHighest,
+            disabledForegroundColor:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
+          ),
+          icon: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 180),
+            child: Icon(
+              buttonActive
+                  ? Icons.arrow_forward_rounded
+                  : Icons.lock_outline_rounded,
+              key: ValueKey(buttonActive),
+            ),
+          ),
+          label: Text(
+            buttonLabel,
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.copyWith(fontWeight: FontWeight.w600),
+          ),
+        ),
+      ),
     );
   }
 }

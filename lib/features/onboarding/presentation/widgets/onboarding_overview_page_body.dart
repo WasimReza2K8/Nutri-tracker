@@ -20,73 +20,152 @@ class OnboardingOverviewPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setButtonActive(true);
+    });
+
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(S.of(context).onboardingStepOverview,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 18),
+            _buildCalorieCard(context),
+            const SizedBox(height: 14),
+            _buildMacroCard(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCalorieCard(BuildContext context) {
+    return Container(
       width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+            Theme.of(context).colorScheme.secondary.withValues(alpha: 0.12),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(S.of(context).onboardingOverviewLabel,
-              style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 32.0),
           Text(S.of(context).onboardingYourGoalLabel,
-              style: Theme.of(context).textTheme.bodyLarge),
-          const SizedBox(height: 8.0),
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(calorieGoalDayString,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary)),
-                Text(S.of(context).onboardingKcalPerDayLabel,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface.withValues(alpha: 0.6)))
-              ],
-            ),
+              style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                calorieGoalDayString,
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  S.of(context).onboardingKcalPerDayLabel,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 32.0),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMacroCard(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(S.of(context).onboardingYourMacrosGoalLabel,
-              style: Theme.of(context).textTheme.bodyLarge),
-          const SizedBox(height: 16.0),
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('$carbsGoalString g',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary)),
-                const SizedBox(height: 8.0),
-                Text(S.of(context).carbsLabel,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface.withValues(alpha: 0.6))),
-                const SizedBox(height: 8.0),
-                Text('$fatGoalString g',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary)),
-                Text(S.of(context).fatLabel,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface.withValues(alpha: 0.6))),
-                const SizedBox(height: 8.0),
-                Text('$proteinGoalString g',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary)),
-                Text(S.of(context).proteinLabel,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface.withValues(alpha: 0.6))),
-              ],
-            ),
+              style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 14),
+          _buildMacroTile(
+            context,
+            label: S.of(context).carbsLabel,
+            grams: carbsGoalString,
+            color: Colors.orange,
+            icon: Icons.grain_rounded,
           ),
+          const SizedBox(height: 10),
+          _buildMacroTile(
+            context,
+            label: S.of(context).fatLabel,
+            grams: fatGoalString,
+            color: Colors.blue,
+            icon: Icons.opacity_rounded,
+          ),
+          const SizedBox(height: 10),
+          _buildMacroTile(
+            context,
+            label: S.of(context).proteinLabel,
+            grams: proteinGoalString,
+            color: Colors.green,
+            icon: Icons.fitness_center_rounded,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMacroTile(BuildContext context,
+      {required String label,
+      required String grams,
+      required Color color,
+      required IconData icon}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(label,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(fontWeight: FontWeight.w600)),
+          ),
+          Text(
+            '$grams g',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w700,
+                ),
+          )
         ],
       ),
     );
