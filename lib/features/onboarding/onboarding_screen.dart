@@ -108,6 +108,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           image: _defaultImageWidget,
           bodyWidget: OnboardingIntroPageBody(
             setPageContent: _setIntroPageData,
+            initialAcceptedPolicy: _introPageButtonActive,
+            initialAcceptedDataCollection:
+                _onboardingBloc.userSelection.acceptDataCollection,
           ),
           footer: HighlightButton(
             buttonLabel: S.of(context).buttonStartLabel,
@@ -121,6 +124,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           image: _defaultImageWidget,
           bodyWidget: OnboardingFirstPageBody(
             setPageContent: _setFirstPageData,
+            initialGender: _onboardingBloc.userSelection.gender,
+            initialBirthday: _onboardingBloc.userSelection.birthday,
           ),
           footer: HighlightButton(
             buttonLabel: S.of(context).buttonNextLabel,
@@ -134,6 +139,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           image: _defaultImageWidget,
           bodyWidget: OnboardingSecondPageBody(
             setButtonContent: _setSecondPageData,
+            initialHeightCm: _onboardingBloc.userSelection.height,
+            initialWeightKg: _onboardingBloc.userSelection.weight,
+            initialUsesImperialUnits:
+                _onboardingBloc.userSelection.usesImperialUnits,
           ),
           footer: HighlightButton(
             buttonLabel: S.of(context).buttonNextLabel,
@@ -147,6 +156,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           image: _defaultImageWidget,
           bodyWidget: OnboardingThirdPageBody(
             setButtonContent: _setThirdPageButton,
+            initialActivity: _onboardingBloc.userSelection.activity,
           ),
           footer: HighlightButton(
             buttonLabel: S.of(context).buttonNextLabel,
@@ -160,6 +170,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           image: _defaultImageWidget,
           bodyWidget: OnboardingFourthPageBody(
             setButtonContent: _setFourthPageButton,
+            initialGoal: _onboardingBloc.userSelection.goal,
           ),
           footer: HighlightButton(
             buttonLabel: S.of(context).buttonNextLabel,
@@ -179,6 +190,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 UserGoalSelectionEntity.loseWeight,
             currentWeightKG: _onboardingBloc.userSelection.weight ?? 70,
             usesImperialUnits: _onboardingBloc.userSelection.usesImperialUnits,
+            initialTargetWeightKG: _onboardingBloc.userSelection.targetWeight,
+            initialWeightChangeRateKgPerWeek:
+                _onboardingBloc.userSelection.weightChangeRateKgPerWeek,
             setButtonContent: _setGoalDetailsPageData,
           ),
           footer: HighlightButton(

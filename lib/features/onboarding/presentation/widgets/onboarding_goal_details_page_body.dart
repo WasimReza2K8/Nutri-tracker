@@ -7,6 +7,8 @@ class OnboardingGoalDetailsPageBody extends StatefulWidget {
   final UserGoalSelectionEntity goal;
   final double currentWeightKG;
   final bool usesImperialUnits;
+  final double? initialTargetWeightKG;
+  final double? initialWeightChangeRateKgPerWeek;
   final Function(bool active, double? targetWeight,
       double? weightChangeRateKgPerWeek) setButtonContent;
 
@@ -15,6 +17,8 @@ class OnboardingGoalDetailsPageBody extends StatefulWidget {
     required this.goal,
     required this.currentWeightKG,
     required this.usesImperialUnits,
+    this.initialTargetWeightKG,
+    this.initialWeightChangeRateKgPerWeek,
     required this.setButtonContent,
   });
 
@@ -26,6 +30,7 @@ class OnboardingGoalDetailsPageBody extends StatefulWidget {
 class _OnboardingGoalDetailsPageBodyState
     extends State<OnboardingGoalDetailsPageBody> {
   final _targetWeightFormKey = GlobalKey<FormState>();
+  final _targetWeightController = TextEditingController();
   double? _parsedTargetWeight;
   int _selectedRateIndex = -1;
 
@@ -33,6 +38,43 @@ class _OnboardingGoalDetailsPageBodyState
   static const List<double> _ratesKgPerWeek = [0.25, 0.5, 1.0];
 
   bool get _isLoseWeight => widget.goal == UserGoalSelectionEntity.loseWeight;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.initialTargetWeightKG != null) {
+      _parsedTargetWeight = widget.initialTargetWeightKG;
+      final displayWeight = widget.usesImperialUnits
+          ? widget.initialTargetWeightKG! * 2.20462
+          : widget.initialTargetWeightKG!;
+      _targetWeightController.text = displayWeight.toStringAsFixed(0);
+    }
+
+    if (widget.initialWeightChangeRateKgPerWeek != null) {
+      final idx = _ratesKgPerWeek.indexWhere(
+          (e) => (e - widget.initialWeightChangeRateKgPerWeek!).abs() < 0.0001);
+      if (idx >= 0) {
+        _selectedRateIndex = idx;
+      }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _checkCorrectInput();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _targetWeightController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +114,7 @@ class _OnboardingGoalDetailsPageBodyState
           Form(
             key: _targetWeightFormKey,
             child: TextFormField(
+              controller: _targetWeightController,
               onChanged: (text) {
                 if (_targetWeightFormKey.currentState!.validate()) {
                   final parsed = double.tryParse(text.replaceAll(',', '.'));

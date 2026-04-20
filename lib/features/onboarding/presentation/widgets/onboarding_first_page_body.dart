@@ -7,8 +7,14 @@ class OnboardingFirstPageBody extends StatefulWidget {
   final Function(
           bool active, UserGenderSelectionEntity? gender, DateTime? birthday)
       setPageContent;
+  final UserGenderSelectionEntity? initialGender;
+  final DateTime? initialBirthday;
 
-  const OnboardingFirstPageBody({super.key, required this.setPageContent});
+  const OnboardingFirstPageBody(
+      {super.key,
+      required this.setPageContent,
+      this.initialGender,
+      this.initialBirthday});
 
   @override
   State<OnboardingFirstPageBody> createState() =>
@@ -21,6 +27,39 @@ class _OnboardingFirstPageBodyState extends State<OnboardingFirstPageBody> {
 
   bool _maleSelected = false;
   bool _femaleSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = widget.initialBirthday;
+    if (_selectedDate != null) {
+      _dateInput.text = DateFormat('yyyy-MM-dd').format(_selectedDate!);
+    }
+
+    if (widget.initialGender == UserGenderSelectionEntity.genderMale) {
+      _maleSelected = true;
+      _femaleSelected = false;
+    } else if (widget.initialGender == UserGenderSelectionEntity.genderFemale) {
+      _maleSelected = false;
+      _femaleSelected = true;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        checkCorrectInput();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _dateInput.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

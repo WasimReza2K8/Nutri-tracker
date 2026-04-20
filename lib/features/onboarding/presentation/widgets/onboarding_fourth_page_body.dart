@@ -5,8 +5,10 @@ import 'package:opennutritracker/generated/l10n.dart';
 class OnboardingFourthPageBody extends StatefulWidget {
   final Function(bool active, UserGoalSelectionEntity? selectedGoal)
       setButtonContent;
+  final UserGoalSelectionEntity? initialGoal;
 
-  const OnboardingFourthPageBody({super.key, required this.setButtonContent});
+  const OnboardingFourthPageBody(
+      {super.key, required this.setButtonContent, this.initialGoal});
 
   @override
   State<OnboardingFourthPageBody> createState() =>
@@ -17,6 +19,34 @@ class _OnboardingFourthPageBodyState extends State<OnboardingFourthPageBody> {
   bool _looseWeightSelected = false;
   bool _maintainWeightSelected = false;
   bool _gainWeightSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    switch (widget.initialGoal) {
+      case UserGoalSelectionEntity.loseWeight:
+        _setSelectedChoiceChip(looseWeight: true);
+        break;
+      case UserGoalSelectionEntity.maintainWeight:
+        _setSelectedChoiceChip(maintainWeigh: true);
+        break;
+      case UserGoalSelectionEntity.gainWeigh:
+        _setSelectedChoiceChip(gainWeight: true);
+        break;
+      case null:
+        break;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _checkCorrectInput();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

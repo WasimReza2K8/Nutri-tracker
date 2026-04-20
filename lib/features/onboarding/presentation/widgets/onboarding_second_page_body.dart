@@ -6,8 +6,16 @@ import 'package:opennutritracker/generated/l10n.dart';
 class OnboardingSecondPageBody extends StatefulWidget {
   final Function(bool active, double? selectedHeight, double? selectedWeight,
       bool usesImperialUnits) setButtonContent;
+  final double? initialHeightCm;
+  final double? initialWeightKg;
+  final bool initialUsesImperialUnits;
 
-  const OnboardingSecondPageBody({super.key, required this.setButtonContent});
+  const OnboardingSecondPageBody(
+      {super.key,
+      required this.setButtonContent,
+      this.initialHeightCm,
+      this.initialWeightKg,
+      this.initialUsesImperialUnits = false});
 
   @override
   State<OnboardingSecondPageBody> createState() =>
@@ -17,11 +25,53 @@ class OnboardingSecondPageBody extends StatefulWidget {
 class _OnboardingSecondPageBodyState extends State<OnboardingSecondPageBody> {
   final _heightFormKey = GlobalKey<FormState>();
   final _weightFormKey = GlobalKey<FormState>();
+  final _heightController = TextEditingController();
+  final _weightController = TextEditingController();
   final _isUnitSelected = [true, false];
   double? _parsedHeight;
   double? _parsedWeight;
 
   bool get _isImperialSelected => _isUnitSelected[1];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _isUnitSelected[0] = !widget.initialUsesImperialUnits;
+    _isUnitSelected[1] = widget.initialUsesImperialUnits;
+
+    if (widget.initialHeightCm != null) {
+      _parsedHeight = widget.initialUsesImperialUnits
+          ? UnitCalc.cmToFeet(widget.initialHeightCm!)
+          : widget.initialHeightCm;
+      _heightController.text = _parsedHeight!.toStringAsFixed(
+          widget.initialUsesImperialUnits ? 1 : 0);
+    }
+
+    if (widget.initialWeightKg != null) {
+      _parsedWeight = widget.initialUsesImperialUnits
+          ? UnitCalc.kgToLbs(widget.initialWeightKg!)
+          : widget.initialWeightKg;
+      _weightController.text = _parsedWeight!.toStringAsFixed(0);
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        checkCorrectInput();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _heightController.dispose();
+    _weightController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +89,7 @@ class _OnboardingSecondPageBodyState extends State<OnboardingSecondPageBody> {
           Form(
             key: _heightFormKey,
             child: TextFormField(
+                controller: _heightController,
                 onChanged: (text) {
                   if (_heightFormKey.currentState!.validate()) {
                     _parsedHeight = double.tryParse(text.replaceAll(',', '.'));
@@ -103,11 +154,13 @@ class _OnboardingSecondPageBodyState extends State<OnboardingSecondPageBody> {
           Form(
             key: _weightFormKey,
             child: TextFormField(
+                controller: _weightController,
                 onChanged: (text) {
                   if (_weightFormKey.currentState!.validate()) {
-                    _parsedWeight = double.tryParse(text);
+                    _parsedWeight = double.tryParse(text.replaceAll(',', '.'));
                     checkCorrectInput();
                   } else {
+                    _parsedWeight = null;
                     checkCorrectInput();
                   }
                 },
