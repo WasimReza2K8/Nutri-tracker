@@ -9,18 +9,62 @@ import 'package:opennutritracker/features/add_meal/domain/entity/meal_entity.dar
 import 'package:opennutritracker/features/add_meal/presentation/add_meal_type.dart';
 import 'package:opennutritracker/features/meal_detail/meal_detail_screen.dart';
 
-class MealItemCard extends StatelessWidget {
+class MealItemCard extends StatefulWidget {
   final DateTime day;
   final AddMealType addMealType;
   final MealEntity mealEntity;
   final bool usesImperialUnits;
+  final VoidCallback onAddPressed;
 
   const MealItemCard(
       {super.key,
       required this.day,
       required this.mealEntity,
       required this.addMealType,
-      required this.usesImperialUnits});
+      required this.usesImperialUnits,
+      required this.onAddPressed});
+
+  @override
+  State<MealItemCard> createState() => _MealItemCardState();
+}
+
+class _MealItemCardState extends State<MealItemCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  bool _isAdded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _onAddPressed() async {
+    if (_isAdded) return;
+
+    // Animate to tick
+    await _animationController.forward();
+    setState(() => _isAdded = true);
+
+    // Call the add callback
+    widget.onAddPressed();
+
+    // Wait 5 seconds
+    await Future.delayed(const Duration(seconds: 5));
+
+    // Animate back to plus
+    await _animationController.reverse();
+    setState(() => _isAdded = false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +79,7 @@ class MealItemCard extends StatelessWidget {
           height: 100,
           child: Center(
               child: ListTile(
-            leading: mealEntity.thumbnailImageUrl != null
+            leading: widget.mealEntity.thumbnailImageUrl != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: CachedNetworkImage(
@@ -43,7 +87,7 @@ class MealItemCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       width: 60,
                       height: 60,
-                      imageUrl: mealEntity.thumbnailImageUrl ?? "",
+                      imageUrl: widget.mealEntity.thumbnailImageUrl ?? "",
                     ))
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(16),
@@ -55,12 +99,12 @@ class MealItemCard extends StatelessWidget {
                   ),
             title: AutoSizeText.rich(
                 TextSpan(
-                    text: mealEntity.name ?? "?",
+                    text: widget.mealEntity.name ?? "?",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.onSurface),
                     children: [
                       TextSpan(
-                          text: ' ${mealEntity.brands ?? ""}',
+                          text: ' ${widget.mealEntity.brands ?? ""}',
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
@@ -73,18 +117,27 @@ class MealItemCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis),
-            subtitle: mealEntity.mealQuantity != null
+            subtitle: widget.mealEntity.mealQuantity != null
                 ? MealValueUnitText(
-                    value: double.parse(mealEntity.mealQuantity ?? "0"),
-                    meal: mealEntity,
-                    usesImperialUnits: usesImperialUnits)
+                    value: double.parse(widget.mealEntity.mealQuantity ?? "0"),
+                    meal: widget.mealEntity,
+                    usesImperialUnits: widget.usesImperialUnits)
                 : const SizedBox(),
-            trailing: IconButton(
-              style: IconButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.onSurface,
+            trailing: ScaleTransition(
+              scale: Tween<double>(begin: 1.0, end: 0.8).animate(
+                CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
               ),
-              icon: const Icon(Icons.add_outlined),
-              onPressed: () => _onItemPressed(context),
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.onSurface,
+                ),
+                icon: AnimatedIcon(
+                  icon: AnimatedIcons.add_event,
+                  progress: _animationController,
+                  size: 24,
+                ),
+                onPressed: _isAdded ? null : _onAddPressed,
+              ),
             ),
           )),
         ),
@@ -96,6 +149,6 @@ class MealItemCard extends StatelessWidget {
   void _onItemPressed(BuildContext context) {
     Navigator.of(context).pushNamed(NavigationOptions.mealDetailRoute,
         arguments: MealDetailScreenArguments(
-            mealEntity, addMealType.getIntakeType(), day, usesImperialUnits));
+            widget.mealEntity, widget.addMealType.getIntakeType(), widget.day, widget.usesImperialUnits));
   }
 }
