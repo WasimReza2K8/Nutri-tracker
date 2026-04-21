@@ -43,6 +43,7 @@ class AddMealScreen extends StatefulWidget {
 
 class _AddMealScreenState extends State<AddMealScreen> {
   final ValueNotifier<String> _searchStringListener = ValueNotifier('');
+  final Set<String> _sessionAddedMealKeys = <String>{};
 
   late AddMealType _mealType;
   late DateTime _day;
@@ -238,7 +239,12 @@ class _AddMealScreenState extends State<AddMealScreen> {
                 // Get recent items
                 final recentItems = <MealEntity>[];
                 if (recentState is RecentMealLoadedState) {
-                  recentItems.addAll(recentState.recentMeals);
+                  recentItems.addAll(
+                    recentState.recentMeals.where(
+                      (meal) =>
+                          !_sessionAddedMealKeys.contains(_mealSessionKey(meal)),
+                    ),
+                  );
                 }
 
                 // Check for loading states. Keep recent loading behavior as-is.
@@ -302,7 +308,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
                       final recentItemIndex = itemIndexAfterSearch - 1;
                       if (recentItemIndex < recentItems.length) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: MealItemCard(
                             day: _day,
                             mealEntity: recentItems[recentItemIndex],
@@ -311,6 +317,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
                             onAddPressed: () {
                               _addMealToDay(recentItems[recentItemIndex]);
                             },
+                            isLast: recentItemIndex == recentItems.length - 1,
                           ),
                         );
                       }
@@ -419,12 +426,12 @@ class _AddMealScreenState extends State<AddMealScreen> {
     try {
       await _addIntakeUsecase.addIntake(intakeEntity);
       await _updateTrackedDay(intakeEntity, _day);
+      _sessionAddedMealKeys.add(_mealSessionKey(meal));
 
       // Refresh screens relying on intake/tracked-day aggregates.
       locator<HomeBloc>().add(const LoadItemsEvent());
       locator<DiaryBloc>().add(const LoadDiaryYearEvent());
       locator<CalendarDayBloc>().add(RefreshCalendarDayEvent());
-      _recentMealBloc.add(const LoadRecentMealEvent(searchString: ""));
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -477,6 +484,10 @@ class _AddMealScreenState extends State<AddMealScreen> {
       fatTracked: intakeEntity.totalFatsGram,
       proteinTracked: intakeEntity.totalProteinsGram,
     );
+  }
+
+  String _mealSessionKey(MealEntity meal) {
+    return '${meal.source.name}|${meal.code ?? ''}|${meal.name ?? ''}|${meal.mealQuantity ?? ''}|${meal.mealUnit ?? ''}';
   }
 
   void _onSearchSubmit(String inputText) {
