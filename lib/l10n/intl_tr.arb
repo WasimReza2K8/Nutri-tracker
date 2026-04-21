@@ -447,5 +447,9 @@
   "cameraPermissionDeniedLabel": "Yiyecek taramak için kamera izni gereklidir",
   "cameraAnalyzingLabel": "Yiyeceğiniz analiz ediliyor...",
   "cameraErrorLabel": "Görüntü analizi başarısız. Lütfen tekrar deneyin.",
-  "cameraTakePhotoLabel": "Yiyeceğinizin fotoğrafını çekin"
+  "cameraTakePhotoLabel": "Yiyeceğinizin fotoğrafını çekin",
+  "calendarFormatMonthLabel": "Ay",
+  "calendarFormatWeekLabel": "Hafta",
+  "calendarExpandedLabel": "Genişletilmiş",
+  "calendarCollapsedLabel": "Daraltılmış"
 }

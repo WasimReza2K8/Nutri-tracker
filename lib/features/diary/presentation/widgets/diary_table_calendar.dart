@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:opennutritracker/core/domain/entity/tracked_day_entity.dart';
 import 'package:opennutritracker/core/utils/extensions.dart';
+import 'package:opennutritracker/generated/l10n.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DiaryTableCalendar extends StatefulWidget {
@@ -30,13 +31,19 @@ class _DiaryTableCalendarState extends State<DiaryTableCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    final isExpanded = _calendarFormat == CalendarFormat.month;
+    final monthLabel =
+        '${S.of(context).calendarFormatMonthLabel} ${isExpanded ? '▲' : '▼'}';
+    final weekLabel =
+        '${S.of(context).calendarFormatWeekLabel} ${isExpanded ? '▲' : '▼'}';
+
     return Column(
       children: [
         TableCalendar(
           calendarFormat: _calendarFormat,
-          availableCalendarFormats: const {
-            CalendarFormat.month: 'Month',
-            CalendarFormat.week: 'Week',
+          availableCalendarFormats: {
+            CalendarFormat.month: monthLabel,
+            CalendarFormat.week: weekLabel,
           },
           onFormatChanged: (format) {
             setState(() {

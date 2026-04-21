@@ -440,5 +440,9 @@
   "cameraPermissionDeniedLabel": "Kameraberechtigung ist erforderlich, um Essen zu scannen",
   "cameraAnalyzingLabel": "Essen wird analysiert...",
   "cameraErrorLabel": "Bildanalyse fehlgeschlagen. Bitte versuchen Sie es erneut.",
-  "cameraTakePhotoLabel": "Fotografieren Sie Ihr Essen"
+  "cameraTakePhotoLabel": "Fotografieren Sie Ihr Essen",
+  "calendarFormatMonthLabel": "Monat",
+  "calendarFormatWeekLabel": "Woche",
+  "calendarExpandedLabel": "Erweitert",
+  "calendarCollapsedLabel": "Eingeklappt"
 }

@@ -92,6 +92,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "calculationsTDEELabel": MessageLookupByLibrary.simpleMessage(
       "TDEE-Gleichung",
     ),
+    "calendarCollapsedLabel": MessageLookupByLibrary.simpleMessage(
+      "Eingeklappt",
+    ),
+    "calendarExpandedLabel": MessageLookupByLibrary.simpleMessage("Erweitert"),
+    "calendarFormatMonthLabel": MessageLookupByLibrary.simpleMessage("Monat"),
+    "calendarFormatWeekLabel": MessageLookupByLibrary.simpleMessage("Woche"),
     "calorieTrackerLabel": MessageLookupByLibrary.simpleMessage(
       "Kalorientracker",
     ),

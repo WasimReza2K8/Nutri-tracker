@@ -3992,6 +3992,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Month`
+  String get calendarFormatMonthLabel {
+    return Intl.message(
+      'Month',
+      name: 'calendarFormatMonthLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Week`
+  String get calendarFormatWeekLabel {
+    return Intl.message(
+      'Week',
+      name: 'calendarFormatWeekLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expanded`
+  String get calendarExpandedLabel {
+    return Intl.message(
+      'Expanded',
+      name: 'calendarExpandedLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Collapsed`
+  String get calendarCollapsedLabel {
+    return Intl.message(
+      'Collapsed',
+      name: 'calendarCollapsedLabel',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

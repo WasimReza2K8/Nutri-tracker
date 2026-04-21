@@ -450,5 +450,9 @@
   "cameraPermissionDeniedLabel": "Camera permission is required to scan food",
   "cameraAnalyzingLabel": "Analyzing your food...",
   "cameraErrorLabel": "Failed to analyze image. Please try again.",
-  "cameraTakePhotoLabel": "Take a photo of your food"
+  "cameraTakePhotoLabel": "Take a photo of your food",
+  "calendarFormatMonthLabel": "Month",
+  "calendarFormatWeekLabel": "Week",
+  "calendarExpandedLabel": "Expanded",
+  "calendarCollapsedLabel": "Collapsed"
 }

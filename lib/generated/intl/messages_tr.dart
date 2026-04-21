@@ -93,6 +93,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "calculationsTDEELabel": MessageLookupByLibrary.simpleMessage(
       "TDEE denklemi",
     ),
+    "calendarCollapsedLabel": MessageLookupByLibrary.simpleMessage(
+      "Daraltılmış",
+    ),
+    "calendarExpandedLabel": MessageLookupByLibrary.simpleMessage(
+      "Genişletilmiş",
+    ),
+    "calendarFormatMonthLabel": MessageLookupByLibrary.simpleMessage("Ay"),
+    "calendarFormatWeekLabel": MessageLookupByLibrary.simpleMessage("Hafta"),
     "calorieTrackerLabel": MessageLookupByLibrary.simpleMessage(
       "Kalori Takibi",
     ),
