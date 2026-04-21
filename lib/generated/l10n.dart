@@ -4032,6 +4032,116 @@ class S {
       args: [],
     );
   }
+
+  /// `Intensity`
+  String get intensityLabel {
+    return Intl.message(
+      'Intensity',
+      name: 'intensityLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light`
+  String get intensityLightLabel {
+    return Intl.message(
+      'Light',
+      name: 'intensityLightLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Moderate`
+  String get intensityModerateLabel {
+    return Intl.message(
+      'Moderate',
+      name: 'intensityModerateLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vigorous`
+  String get intensityVigorousLabel {
+    return Intl.message(
+      'Vigorous',
+      name: 'intensityVigorousLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid duration.`
+  String get invalidInputLabel {
+    return Intl.message(
+      'Please enter a valid duration.',
+      name: 'invalidInputLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `min`
+  String get minutesUnitLabel {
+    return Intl.message(
+      'min',
+      name: 'minutesUnitLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `hr`
+  String get hoursUnitLabel {
+    return Intl.message(
+      'hr',
+      name: 'hoursUnitLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Duration`
+  String get durationLabel {
+    return Intl.message(
+      'Duration',
+      name: 'durationLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `High Burn`
+  String get burnIntensityHighLabel {
+    return Intl.message(
+      'High Burn',
+      name: 'burnIntensityHighLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Medium Burn`
+  String get burnIntensityMediumLabel {
+    return Intl.message(
+      'Medium Burn',
+      name: 'burnIntensityMediumLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light Burn`
+  String get burnIntensityLightLabel {
+    return Intl.message(
+      'Light Burn',
+      name: 'burnIntensityLightLabel',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

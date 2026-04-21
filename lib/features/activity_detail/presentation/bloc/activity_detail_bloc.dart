@@ -44,9 +44,19 @@ class ActivityDetailBloc
     });
   }
 
-  double getTotalKcalBurned(UserEntity user,
-      PhysicalActivityEntity physicalActivity, double duration) {
-    return METCalc.getTotalBurnedKcal(user, physicalActivity, duration);
+  double getTotalKcalBurned(
+    UserEntity user,
+    PhysicalActivityEntity physicalActivity,
+    double duration, {
+    double? weightKg,
+    ActivityIntensity intensity = ActivityIntensity.moderate,
+  }) {
+    return METCalc.getTotalBurnedKcalAdvanced(
+      userWeightKg: weightKg ?? user.weightKG,
+      physicalActivityEntity: physicalActivity,
+      durationMin: duration,
+      intensity: intensity,
+    );
   }
 
   void persistActivity(

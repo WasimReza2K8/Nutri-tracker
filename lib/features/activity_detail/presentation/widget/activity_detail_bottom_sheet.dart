@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:opennutritracker/core/domain/entity/physical_activity_entity.dart';
-import 'package:opennutritracker/features/activity_detail/presentation/bloc/activity_detail_bloc.dart';
+import 'package:opennutritracker/core/utils/calc/met_calc.dart';
 import 'package:opennutritracker/generated/l10n.dart';
 
 class ActivityDetailBottomSheet extends StatefulWidget {
   final Function(BuildContext) onAddButtonPressed;
-  final PhysicalActivityEntity activityEntity;
   final TextEditingController quantityTextController;
-  final ActivityDetailBloc activityDetailBloc;
+  final TextEditingController weightTextController;
+  final ValueChanged<String> onUnitChanged;
+  final ValueChanged<ActivityIntensity> onIntensityChanged;
 
   const ActivityDetailBottomSheet(
       {super.key,
       required this.onAddButtonPressed,
       required this.quantityTextController,
-      required this.activityEntity,
-      required this.activityDetailBloc});
+      required this.weightTextController,
+      required this.onUnitChanged,
+      required this.onIntensityChanged});
 
   @override
   State<ActivityDetailBottomSheet> createState() =>
@@ -23,6 +24,9 @@ class ActivityDetailBottomSheet extends StatefulWidget {
 }
 
 class _ActivityDetailBottomSheetState extends State<ActivityDetailBottomSheet> {
+  String _selectedUnit = 'min';
+  ActivityIntensity _selectedIntensity = ActivityIntensity.moderate;
+
   @override
   Widget build(BuildContext context) {
     return BottomSheet(
@@ -45,9 +49,21 @@ class _ActivityDetailBottomSheetState extends State<ActivityDetailBottomSheet> {
           child: Wrap(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 32.0, 16.0, 8.0),
+                padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Center(
+                      child: Container(
+                        width: 44,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.outlineVariant,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     Row(
                       children: [
                         Expanded(
@@ -71,19 +87,76 @@ class _ActivityDetailBottomSheetState extends State<ActivityDetailBottomSheet> {
                         ),
                         const SizedBox(width: 16.0),
                         Expanded(
-                            child: DropdownButtonFormField(
+                            child: DropdownButtonFormField<String>(
+                          value: _selectedUnit,
                           decoration: InputDecoration(
                               border: const OutlineInputBorder(),
                               labelText: S.of(context).unitLabel),
                           items: const <DropdownMenuItem<String>>[
-                            DropdownMenuItem(child: Text('min'))
+                            DropdownMenuItem(value: 'min', child: Text('min')),
+                            DropdownMenuItem(value: 'hr', child: Text('hr')),
                           ],
-                          onChanged: (Object? value) {},
+                          onChanged: (String? value) {
+                            if (value == null) {
+                              return;
+                            }
+                            setState(() => _selectedUnit = value);
+                            widget.onUnitChanged(value);
+                          },
                         ))
                       ],
                     ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: widget.weightTextController,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[0-9]+[,.]{0,1}[0-9]*')),
+                        TextInputFormatter.withFunction(
+                          (oldValue, newValue) => newValue.copyWith(
+                            text: newValue.text.replaceAll(',', '.'),
+                          ),
+                        ),
+                      ],
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText:
+                            '${S.of(context).weightLabel} (${S.of(context).kgLabel})',
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      S.of(context).intensityLabel,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    SegmentedButton<ActivityIntensity>(
+                      showSelectedIcon: false,
+                      selected: {_selectedIntensity},
+                      onSelectionChanged: (selection) {
+                        if (selection.isEmpty) {
+                          return;
+                        }
+                        setState(() => _selectedIntensity = selection.first);
+                        widget.onIntensityChanged(selection.first);
+                      },
+                      segments: [
+                        ButtonSegment(
+                            value: ActivityIntensity.light,
+                            label: Text(S.of(context).intensityLightLabel)),
+                        ButtonSegment(
+                            value: ActivityIntensity.moderate,
+                            label: Text(S.of(context).intensityModerateLabel)),
+                        ButtonSegment(
+                            value: ActivityIntensity.vigorous,
+                            label: Text(S.of(context).intensityVigorousLabel)),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
                     SizedBox(
-                      width: double.infinity, // Make button full width
+                      width: double.infinity,
                       child: ElevatedButton.icon(
                           onPressed: () {
                             widget.onAddButtonPressed(context);

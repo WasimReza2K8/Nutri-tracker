@@ -891,6 +891,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "weightLossRateSubtitle": MessageLookupByLibrary.simpleMessage(
       "Ne kadar hızlı kilo vermek istiyorsunuz?",
     ),
+    "intensityLabel": MessageLookupByLibrary.simpleMessage("Yoğunluk"),
+    "intensityLightLabel": MessageLookupByLibrary.simpleMessage("Hafif"),
+    "intensityModerateLabel": MessageLookupByLibrary.simpleMessage("Orta"),
+    "intensityVigorousLabel": MessageLookupByLibrary.simpleMessage("Şiddetli"),
+    "invalidInputLabel": MessageLookupByLibrary.simpleMessage(
+      "Lütfen geçerli bir süre girin.",
+    ),
+    "minutesUnitLabel": MessageLookupByLibrary.simpleMessage("dk"),
+    "hoursUnitLabel": MessageLookupByLibrary.simpleMessage("st"),
+    "durationLabel": MessageLookupByLibrary.simpleMessage("Süre"),
+    "burnIntensityHighLabel": MessageLookupByLibrary.simpleMessage("Yüksek Yakım"),
+    "burnIntensityMediumLabel": MessageLookupByLibrary.simpleMessage("Orta Yakım"),
+    "burnIntensityLightLabel": MessageLookupByLibrary.simpleMessage("Hafif Yakım"),
     "yearsLabel": m3,
   };
 }

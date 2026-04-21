@@ -17,8 +17,8 @@ void main() {
     double resultKcalBurned =
         METCalc.getTotalBurnedKcal(user, activity, duration);
 
-    // 8 * 80 * (60 / 60)
-    int expectedKcalBurned = 640;
+    // 8 * 3.5 * 80 / 200 * 60
+    int expectedKcalBurned = 672;
 
     expect(resultKcalBurned.toInt(), expectedKcalBurned);
   });
@@ -35,9 +35,30 @@ void main() {
     double resultKcalBurned =
         METCalc.getTotalBurnedKcal(user, activity, duration);
 
-    // 4 * 75 * (30 / 60)
-    int expectedKcalBurned = 150;
+    // 4 * 3.5 * 75 / 200 * 30
+    int expectedKcalBurned = 157;
 
     expect(resultKcalBurned.toInt(), expectedKcalBurned);
+  });
+
+  test('Vigorous intensity applies a higher burn than moderate intensity', () {
+    final user = UserEntityFixtures.youngSedentaryMaleWantingToMaintainWeight;
+    const activity = PhysicalActivityFixtures.vigorousRunning;
+
+    final moderateBurn = METCalc.getTotalBurnedKcalAdvanced(
+      userWeightKg: user.weightKG,
+      physicalActivityEntity: activity,
+      durationMin: 30,
+      intensity: ActivityIntensity.moderate,
+    );
+
+    final vigorousBurn = METCalc.getTotalBurnedKcalAdvanced(
+      userWeightKg: user.weightKG,
+      physicalActivityEntity: activity,
+      durationMin: 30,
+      intensity: ActivityIntensity.vigorous,
+    );
+
+    expect(vigorousBurn, greaterThan(moderateBurn));
   });
 }

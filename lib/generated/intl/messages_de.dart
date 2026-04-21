@@ -909,6 +909,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "weightLossRateSubtitle": MessageLookupByLibrary.simpleMessage(
       "Wie schnell möchtest du abnehmen?",
     ),
+    "intensityLabel": MessageLookupByLibrary.simpleMessage("Intensität"),
+    "intensityLightLabel": MessageLookupByLibrary.simpleMessage("Leicht"),
+    "intensityModerateLabel": MessageLookupByLibrary.simpleMessage("Moderat"),
+    "intensityVigorousLabel": MessageLookupByLibrary.simpleMessage("Intensiv"),
+    "invalidInputLabel": MessageLookupByLibrary.simpleMessage(
+      "Bitte geben Sie eine gültige Dauer ein.",
+    ),
+    "minutesUnitLabel": MessageLookupByLibrary.simpleMessage("Min."),
+    "hoursUnitLabel": MessageLookupByLibrary.simpleMessage("Std."),
+    "durationLabel": MessageLookupByLibrary.simpleMessage("Dauer"),
+    "burnIntensityHighLabel": MessageLookupByLibrary.simpleMessage("Hoher Verbrauch"),
+    "burnIntensityMediumLabel": MessageLookupByLibrary.simpleMessage("Mittlerer Verbrauch"),
+    "burnIntensityLightLabel": MessageLookupByLibrary.simpleMessage("Leichter Verbrauch"),
     "yearsLabel": m3,
   };
 }
