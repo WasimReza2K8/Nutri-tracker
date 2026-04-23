@@ -9,7 +9,6 @@ class MainAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: Icon(iconData),
       title: Text(title),
     );
   }

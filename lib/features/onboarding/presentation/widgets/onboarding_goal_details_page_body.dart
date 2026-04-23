@@ -8,9 +8,7 @@ class OnboardingGoalDetailsPageBody extends StatefulWidget {
   final double currentWeightKG;
   final bool usesImperialUnits;
   final double? initialTargetWeightKG;
-  final double? initialWeightChangeRateKgPerWeek;
-  final Function(bool active, double? targetWeight,
-      double? weightChangeRateKgPerWeek) setButtonContent;
+  final Function(bool active, double? targetWeight) setButtonContent;
 
   const OnboardingGoalDetailsPageBody({
     super.key,
@@ -18,7 +16,6 @@ class OnboardingGoalDetailsPageBody extends StatefulWidget {
     required this.currentWeightKG,
     required this.usesImperialUnits,
     this.initialTargetWeightKG,
-    this.initialWeightChangeRateKgPerWeek,
     required this.setButtonContent,
   });
 
@@ -32,10 +29,6 @@ class _OnboardingGoalDetailsPageBodyState
   final _targetWeightFormKey = GlobalKey<FormState>();
   final _targetWeightController = TextEditingController();
   double? _parsedTargetWeight;
-  int _selectedRateIndex = -1;
-
-  // Rates in kg/week
-  static const List<double> _ratesKgPerWeek = [0.25, 0.5, 1.0];
 
   bool get _isLoseWeight => widget.goal == UserGoalSelectionEntity.loseWeight;
 
@@ -49,14 +42,6 @@ class _OnboardingGoalDetailsPageBodyState
           ? widget.initialTargetWeightKG! * 2.20462
           : widget.initialTargetWeightKG!;
       _targetWeightController.text = displayWeight.toStringAsFixed(0);
-    }
-
-    if (widget.initialWeightChangeRateKgPerWeek != null) {
-      final idx = _ratesKgPerWeek.indexWhere(
-          (e) => (e - widget.initialWeightChangeRateKgPerWeek!).abs() < 0.0001);
-      if (idx >= 0) {
-        _selectedRateIndex = idx;
-      }
     }
   }
 
@@ -143,15 +128,6 @@ class _OnboardingGoalDetailsPageBodyState
               ),
             ),
           ),
-          const SizedBox(height: 14),
-          _buildSectionCard(
-            context,
-            title: S.of(context).weightChangeRateLabel,
-            subtitle: _isLoseWeight
-                ? S.of(context).weightLossRateSubtitle
-                : S.of(context).weightGainRateSubtitle,
-            child: _buildRateCards(context),
-          ),
         ],
       ),
     );
@@ -188,99 +164,6 @@ class _OnboardingGoalDetailsPageBodyState
     );
   }
 
-  Widget _buildRateCards(BuildContext context) {
-    final labels = [
-      S.of(context).weightChangeRateSlow,
-      S.of(context).weightChangeRateNormal,
-      S.of(context).weightChangeRateFast,
-    ];
-    final descriptions = widget.usesImperialUnits
-        ? [
-            S.of(context).weightChangeRateSlowDescLbs,
-            S.of(context).weightChangeRateNormalDescLbs,
-            S.of(context).weightChangeRateFastDescLbs,
-          ]
-        : [
-            S.of(context).weightChangeRateSlowDesc,
-            S.of(context).weightChangeRateNormalDesc,
-            S.of(context).weightChangeRateFastDesc,
-          ];
-    final icons = [
-      Icons.directions_walk_rounded,
-      Icons.directions_run_rounded,
-      Icons.bolt_rounded,
-    ];
-
-    return Row(
-      children: List.generate(3, (index) {
-        final isSelected = _selectedRateIndex == index;
-        return Expanded(
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _selectedRateIndex = index;
-                _checkCorrectInput();
-              });
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              margin: EdgeInsets.only(
-                  left: index == 0 ? 0 : 4, right: index == 2 ? 0 : 4),
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.15)
-                    : Theme.of(context).colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context)
-                          .colorScheme
-                          .outline
-                          .withValues(alpha: 0.3),
-                  width: isSelected ? 2 : 1,
-                ),
-              ),
-              child: Column(
-                children: [
-                  Icon(icons[index],
-                      size: 28,
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onSurfaceVariant),
-                  const SizedBox(height: 8),
-                  Text(labels[index],
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            fontWeight: isSelected
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
-                          )),
-                  const SizedBox(height: 4),
-                  Text(descriptions[index],
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.6),
-                          ),
-                      textAlign: TextAlign.center),
-                ],
-              ),
-            ),
-          ),
-        );
-      }),
-    );
-  }
-
   String? _validateTargetWeight(String? value) {
     if (value == null || value.isEmpty) {
       return S.of(context).onboardingWrongTargetWeightLabel;
@@ -291,8 +174,7 @@ class _OnboardingGoalDetailsPageBodyState
     }
 
     // Convert to kg for comparison
-    final targetKg =
-        widget.usesImperialUnits ? parsed * 0.453592 : parsed;
+    final targetKg = widget.usesImperialUnits ? parsed * 0.453592 : parsed;
 
     if (_isLoseWeight && targetKg >= widget.currentWeightKG) {
       return S.of(context).onboardingTargetWeightValidationLose;
@@ -304,12 +186,10 @@ class _OnboardingGoalDetailsPageBodyState
   }
 
   void _checkCorrectInput() {
-    if (_parsedTargetWeight != null && _selectedRateIndex >= 0) {
-      widget.setButtonContent(
-          true, _parsedTargetWeight, _ratesKgPerWeek[_selectedRateIndex]);
+    if (_parsedTargetWeight != null) {
+      widget.setButtonContent(true, _parsedTargetWeight);
     } else {
-      widget.setButtonContent(false, null, null);
+      widget.setButtonContent(false, null);
     }
   }
 }
-

@@ -10,6 +10,7 @@ import 'package:opennutritracker/features/onboarding/presentation/bloc/onboardin
 import 'package:opennutritracker/features/onboarding/presentation/onboarding_intro_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_fourth_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_goal_details_page_body.dart';
+import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_target_date_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_overview_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/onboarding_third_page_body.dart';
 import 'package:opennutritracker/features/onboarding/presentation/widgets/highlight_button.dart';
@@ -39,6 +40,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool _thirdPageButtonActive = false;
   bool _fourthPageButtonActive = false;
   bool _goalDetailsPageButtonActive = false;
+  bool _targetDatePageButtonActive = false;
   bool _overviewPageButtonActive = false;
 
   bool _needsGoalDetails = false;
@@ -97,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         pages: _getPageViewModels());
   }
 
-  int get _overviewPageIndex => _needsGoalDetails ? 6 : 5;
+  int get _overviewPageIndex => _needsGoalDetails ? 7 : 5;
 
   List<PageViewModel> _getPageViewModels() {
     final pages = <PageViewModel>[
@@ -191,14 +193,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             currentWeightKG: _onboardingBloc.userSelection.weight ?? 70,
             usesImperialUnits: _onboardingBloc.userSelection.usesImperialUnits,
             initialTargetWeightKG: _onboardingBloc.userSelection.targetWeight,
-            initialWeightChangeRateKgPerWeek:
-                _onboardingBloc.userSelection.weightChangeRateKgPerWeek,
             setButtonContent: _setGoalDetailsPageData,
           ),
           footer: HighlightButton(
             buttonLabel: S.of(context).buttonNextLabel,
-            onButtonPressed: () => _scrollToPage(_overviewPageIndex),
+            onButtonPressed: () => _scrollToPage(6),
             buttonActive: _goalDetailsPageButtonActive,
+          )));
+
+      // Page 6 (conditional): Target Date
+      pages.add(PageViewModel(
+          titleWidget: const SizedBox(),
+          decoration: _pageDecoration,
+          image: _defaultImageWidget,
+          bodyWidget: OnboardingTargetDatePageBody(
+            goal: _onboardingBloc.userSelection.goal ??
+                UserGoalSelectionEntity.loseWeight,
+            currentWeightKG: _onboardingBloc.userSelection.weight ?? 70,
+            targetWeightKG: _onboardingBloc.userSelection.targetWeight,
+            usesImperialUnits: _onboardingBloc.userSelection.usesImperialUnits,
+            initialTargetDate: _onboardingBloc.userSelection.targetDate,
+            setButtonContent: _setTargetDatePageData,
+          ),
+          footer: HighlightButton(
+            buttonLabel: S.of(context).buttonNextLabel,
+            onButtonPressed: () => _scrollToPage(_overviewPageIndex),
+            buttonActive: _targetDatePageButtonActive,
           )));
     }
 
@@ -208,18 +228,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         decoration: _pageDecoration,
         image: _defaultImageWidget,
         bodyWidget: OnboardingOverviewPageBody(
-          calorieGoalDayString: _onboardingBloc
-                  .getOverviewCalorieGoal()
-                  ?.toInt()
-                  .toString() ??
+          calorieGoalDayString: () =>
+              _onboardingBloc.getOverviewCalorieGoal()?.toInt().toString() ??
               "?",
-          carbsGoalString:
+          carbsGoalString: () =>
               _onboardingBloc.getOverviewCarbsGoal()?.toInt().toString() ?? "?",
-          fatGoalString:
+          fatGoalString: () =>
               _onboardingBloc.getOverviewFatGoal()?.toInt().toString() ?? "?",
-          proteinGoalString:
+          proteinGoalString: () =>
               _onboardingBloc.getOverviewProteinGoal()?.toInt().toString() ??
-                  "?",
+              "?",
           setButtonActive: _setOverviewPageContent,
         ),
         footer: HighlightButton(
@@ -279,28 +297,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _onboardingBloc.userSelection.goal = selectedGoal;
       _fourthPageButtonActive = active;
 
-      final needsDetails =
-          selectedGoal == UserGoalSelectionEntity.loseWeight ||
-              selectedGoal == UserGoalSelectionEntity.gainWeigh;
+      final needsDetails = selectedGoal == UserGoalSelectionEntity.loseWeight ||
+          selectedGoal == UserGoalSelectionEntity.gainWeigh;
 
       if (needsDetails != _needsGoalDetails) {
         _needsGoalDetails = needsDetails;
         if (!needsDetails) {
           _onboardingBloc.userSelection.targetWeight = null;
           _onboardingBloc.userSelection.weightChangeRateKgPerWeek = null;
+          _onboardingBloc.userSelection.targetDate = null;
           _goalDetailsPageButtonActive = false;
+          _targetDatePageButtonActive = false;
+        } else {
+          // Manual rate is not part of onboarding anymore.
+          _onboardingBloc.userSelection.weightChangeRateKgPerWeek = null;
         }
       }
     });
   }
 
-  void _setGoalDetailsPageData(
-      bool active, double? targetWeight, double? weightChangeRateKgPerWeek) {
+  void _setGoalDetailsPageData(bool active, double? targetWeight) {
     setState(() {
       _onboardingBloc.userSelection.targetWeight = targetWeight;
-      _onboardingBloc.userSelection.weightChangeRateKgPerWeek =
-          weightChangeRateKgPerWeek;
+      _onboardingBloc.userSelection.weightChangeRateKgPerWeek = null;
       _goalDetailsPageButtonActive = active;
+    });
+  }
+
+  void _setTargetDatePageData(bool active, DateTime? targetDate) {
+    setState(() {
+      _onboardingBloc.userSelection.targetDate = targetDate;
+      _targetDatePageButtonActive = active;
     });
   }
 

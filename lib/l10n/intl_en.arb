@@ -465,5 +465,44 @@
   "calendarFormatMonthLabel": "Month",
   "calendarFormatWeekLabel": "Week",
   "calendarExpandedLabel": "Expanded",
-  "calendarCollapsedLabel": "Collapsed"
+  "calendarCollapsedLabel": "Collapsed",
+  "bodyInfoLabel": "Body Info",
+  "targetLabel": "Target: {value}",
+  "@targetLabel": {
+    "placeholders": {
+      "value": {"type": "String"}
+    }
+  },
+  "selectTargetWeightDialogLabel": "Set Target Weight",
+  "onboardingStepTargetDate": "Target Timeline",
+  "targetDateLabel": "Target Date",
+  "targetDateSubtitle": "When do you want to reach your goal?",
+  "targetDateHint": "Select your target date",
+  "targetDateValidationPast": "Target date must be in the future",
+  "targetDateValidationTooSoon": "Allow at least 2 weeks for a healthy plan",
+  "targetDateSelectedLabel": "Goal date: {date}",
+  "@targetDateSelectedLabel": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "targetDateWeeksAway": "{weeks} weeks away",
+  "@targetDateWeeksAway": {
+    "placeholders": {
+      "weeks": {"type": "String"}
+    }
+  },
+  "targetDateImpliedRate": "~{rate} per week",
+  "@targetDateImpliedRate": {
+    "placeholders": {
+      "rate": {"type": "String"}
+    }
+  },
+  "targetDateSkipLabel": "Skip",
+  "weightProgressPercentLabel": "{percent}%",
+  "@weightProgressPercentLabel": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  }
 }

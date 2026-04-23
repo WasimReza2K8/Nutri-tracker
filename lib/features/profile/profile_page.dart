@@ -12,6 +12,7 @@ import 'package:opennutritracker/features/profile/presentation/widgets/set_gende
 import 'package:opennutritracker/features/profile/presentation/widgets/set_goal_dialog.dart';
 import 'package:opennutritracker/features/profile/presentation/widgets/set_height_dialog.dart';
 import 'package:opennutritracker/features/profile/presentation/widgets/set_pal_category_dialog.dart';
+import 'package:opennutritracker/features/profile/presentation/widgets/set_target_weight_dialog.dart';
 import 'package:opennutritracker/features/profile/presentation/widgets/set_weight_dialog.dart';
 import 'package:opennutritracker/generated/l10n.dart';
 
@@ -41,10 +42,10 @@ class _ProfilePageState extends State<ProfilePage>
 
     _headerFadeAnim =
         CurvedAnimation(parent: _headerAnimController, curve: Curves.easeOut);
-    _headerSlideAnim = Tween<Offset>(
-            begin: const Offset(0, -0.2), end: Offset.zero)
-        .animate(CurvedAnimation(
-            parent: _headerAnimController, curve: Curves.easeOutCubic));
+    _headerSlideAnim =
+        Tween<Offset>(begin: const Offset(0, -0.2), end: Offset.zero).animate(
+            CurvedAnimation(
+                parent: _headerAnimController, curve: Curves.easeOutCubic));
 
     super.initState();
   }
@@ -98,7 +99,8 @@ class _ProfilePageState extends State<ProfilePage>
             position: _headerSlideAnim,
             child: FadeTransition(
               opacity: _headerFadeAnim,
-              child: _buildHeader(context, userBMIEntity, user, usesImperialUnits, colorScheme),
+              child: _buildHeader(
+                  context, userBMIEntity, user, usesImperialUnits, colorScheme),
             ),
           ),
         ),
@@ -109,18 +111,21 @@ class _ProfilePageState extends State<ProfilePage>
               _AnimatedProfileCard(
                 animController: _listAnimController,
                 index: 0,
-                child: _buildSectionHeader(context, S.of(context).goalLabel, Icons.track_changes_rounded),
+                child: _buildSectionHeader(context, S.of(context).goalLabel,
+                    Icons.track_changes_rounded),
               ),
               _AnimatedProfileCard(
                 animController: _listAnimController,
                 index: 1,
-                child: _buildGoalCard(context, user, usesImperialUnits, colorScheme),
+                child: _buildGoalCard(
+                    context, user, usesImperialUnits, colorScheme),
               ),
               const SizedBox(height: 16),
               _AnimatedProfileCard(
                 animController: _listAnimController,
                 index: 2,
-                child: _buildSectionHeader(context, S.of(context).activityLabel, Icons.directions_run_rounded),
+                child: _buildSectionHeader(context, S.of(context).activityLabel,
+                    Icons.directions_run_rounded),
               ),
               _AnimatedProfileCard(
                 animController: _listAnimController,
@@ -131,12 +136,14 @@ class _ProfilePageState extends State<ProfilePage>
               _AnimatedProfileCard(
                 animController: _listAnimController,
                 index: 4,
-                child: _buildSectionHeader(context, 'Body Info', Icons.accessibility_new_rounded),
+                child: _buildSectionHeader(context, S.of(context).bodyInfoLabel,
+                    Icons.accessibility_new_rounded),
               ),
               _AnimatedProfileCard(
                 animController: _listAnimController,
                 index: 5,
-                child: _buildBodyInfoCard(context, user, usesImperialUnits, colorScheme),
+                child: _buildBodyInfoCard(
+                    context, user, usesImperialUnits, colorScheme),
               ),
               const SizedBox(height: 32),
             ]),
@@ -201,7 +208,9 @@ class _ProfilePageState extends State<ProfilePage>
                         _buildQuickStat(
                           context,
                           '${_profileBloc.getDisplayWeight(user, usesImperialUnits)}',
-                          usesImperialUnits ? S.of(context).lbsLabel : S.of(context).kgLabel,
+                          usesImperialUnits
+                              ? S.of(context).lbsLabel
+                              : S.of(context).kgLabel,
                           Icons.monitor_weight_outlined,
                           colorScheme,
                         ),
@@ -209,7 +218,9 @@ class _ProfilePageState extends State<ProfilePage>
                         _buildQuickStat(
                           context,
                           '${_profileBloc.getDisplayHeight(user, usesImperialUnits)}',
-                          usesImperialUnits ? S.of(context).ftLabel : S.of(context).cmLabel,
+                          usesImperialUnits
+                              ? S.of(context).ftLabel
+                              : S.of(context).cmLabel,
                           Icons.height_outlined,
                           colorScheme,
                         ),
@@ -222,7 +233,8 @@ class _ProfilePageState extends State<ProfilePage>
           ),
           if (user.targetWeightKG != null) ...[
             const SizedBox(height: 20),
-            _buildWeightProgressBar(context, user, usesImperialUnits, colorScheme),
+            _buildWeightProgressBar(
+                context, user, usesImperialUnits, colorScheme),
           ],
         ],
       ),
@@ -260,7 +272,8 @@ class _ProfilePageState extends State<ProfilePage>
             Text(
               S.of(context).bmiLabel,
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
+                    color:
+                        colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
                   ),
             ),
           ],
@@ -274,7 +287,9 @@ class _ProfilePageState extends State<ProfilePage>
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14, color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7)),
+        Icon(icon,
+            size: 14,
+            color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7)),
         const SizedBox(width: 4),
         Text(
           '$value $unit',
@@ -314,16 +329,18 @@ class _ProfilePageState extends State<ProfilePage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Target: $targetDisplay',
+              S.of(context).targetLabel(targetDisplay),
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: colorScheme.onPrimaryContainer,
                     fontWeight: FontWeight.w600,
                   ),
             ),
             Text(
-              '${(progress * 100).toStringAsFixed(0)}%',
+              S.of(context).weightProgressPercentLabel(
+                  (progress * 100).toStringAsFixed(0)),
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
+                    color:
+                        colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
                   ),
             ),
           ],
@@ -338,7 +355,8 @@ class _ProfilePageState extends State<ProfilePage>
             child: LinearProgressIndicator(
               value: value,
               minHeight: 10,
-              backgroundColor: colorScheme.onPrimaryContainer.withValues(alpha: 0.15),
+              backgroundColor:
+                  colorScheme.onPrimaryContainer.withValues(alpha: 0.15),
               valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
             ),
           ),
@@ -353,9 +371,7 @@ class _ProfilePageState extends State<ProfilePage>
       padding: const EdgeInsets.only(left: 4, bottom: 8, top: 4),
       child: Row(
         children: [
-          Icon(icon,
-              size: 18,
-              color: Theme.of(context).colorScheme.primary),
+          Icon(icon, size: 18, color: Theme.of(context).colorScheme.primary),
           const SizedBox(width: 8),
           Text(
             title,
@@ -372,6 +388,8 @@ class _ProfilePageState extends State<ProfilePage>
 
   Widget _buildGoalCard(BuildContext context, UserEntity user,
       bool usesImperialUnits, ColorScheme colorScheme) {
+    final shouldShowTargetDate =
+        user.goal != UserWeightGoalEntity.maintainWeight;
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -402,29 +420,38 @@ class _ProfilePageState extends State<ProfilePage>
               context: context,
               icon: Icons.gps_fixed_rounded,
               iconColor: colorScheme.primary,
-              title: 'Target Weight',
+              title: S.of(context).targetWeightLabel,
               subtitle:
                   '${usesImperialUnits ? UnitCalc.kgToLbs(user.targetWeightKG!).toStringAsFixed(0) : user.targetWeightKG!.toStringAsFixed(0)} ${usesImperialUnits ? S.of(context).lbsLabel : S.of(context).kgLabel}',
-              onTap: null,
-              trailingWidget: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  user.goal.getName(context),
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
+              onTap: () =>
+                  _showSetTargetWeightDialog(context, user, usesImperialUnits),
+            ),
+          ],
+          if (shouldShowTargetDate) ...[
+            _buildDivider(colorScheme),
+            _buildTappableRow(
+              context: context,
+              icon: Icons.calendar_month_rounded,
+              iconColor: colorScheme.tertiary,
+              title: S.of(context).targetDateLabel,
+              subtitle: _getTargetDateDisplayLabel(context, user),
+              onTap: () => _showSetTargetDateDialog(
+                context,
+                user,
               ),
             ),
           ],
         ],
       ),
     );
+  }
+
+  String _getTargetDateDisplayLabel(BuildContext context, UserEntity user) {
+    final targetDate = user.targetDateForWeightGoal;
+    if (targetDate == null) {
+      return S.of(context).targetDateHint;
+    }
+    return MaterialLocalizations.of(context).formatMediumDate(targetDate);
   }
 
   Widget _buildActivityCard(
@@ -644,6 +671,53 @@ class _ProfilePageState extends State<ProfilePage>
       _profileBloc.updateUser(userEntity);
     }
   }
+
+  Future<void> _showSetTargetWeightDialog(BuildContext context,
+      UserEntity userEntity, bool usesImperialUnits) async {
+    final currentTargetDisplay = userEntity.targetWeightKG != null
+        ? (usesImperialUnits
+            ? UnitCalc.kgToLbs(userEntity.targetWeightKG!)
+            : userEntity.targetWeightKG!)
+        : null;
+    /* final currentWeightDisplay = usesImperialUnits
+        ? UnitCalc.kgToLbs(userEntity.weightKG)
+        : userEntity.weightKG;*/
+
+    final selectedTarget = await showDialog<double>(
+        context: context,
+        builder: (context) => SetTargetWeightDialog(
+              currentWeight: currentTargetDisplay!,
+              currentTargetWeight: currentTargetDisplay,
+              usesImperialUnits: usesImperialUnits,
+            ));
+
+    if (selectedTarget != null) {
+      if (usesImperialUnits) {
+        userEntity.targetWeightKG = UnitCalc.lbsToKg(selectedTarget);
+      } else {
+        userEntity.targetWeightKG = selectedTarget;
+      }
+      _profileBloc.updateUser(userEntity);
+    }
+  }
+
+  Future<void> _showSetTargetDateDialog(
+      BuildContext context, UserEntity userEntity) async {
+    final now = DateTime.now();
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: userEntity.targetDateForWeightGoal ??
+          now.add(const Duration(days: 84)),
+      firstDate: now.add(const Duration(days: 14)),
+      lastDate: now.add(const Duration(days: 730)),
+    );
+
+    if (selectedDate != null) {
+      userEntity.targetDateForWeightGoal = selectedDate;
+      userEntity.weightChangeRateKgPerWeek = null;
+      _profileBloc.updateUser(userEntity);
+    }
+  }
 }
 
 class _AnimatedProfileCard extends StatelessWidget {
@@ -671,8 +745,7 @@ class _AnimatedProfileCard extends StatelessWidget {
       builder: (context, child) => FadeTransition(
         opacity: animation,
         child: SlideTransition(
-          position: Tween<Offset>(
-                  begin: const Offset(0, 0.3), end: Offset.zero)
+          position: Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero)
               .animate(animation),
           child: child,
         ),

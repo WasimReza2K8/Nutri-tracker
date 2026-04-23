@@ -27,7 +27,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(riskValue) => "Risiko für Begleiterkrankungen: ${riskValue}";
 
-  static String m3(age) => "${age} Jahre";
+  static String m3(rate) => "~${rate} pro Woche";
+
+  static String m4(date) => "Zieldatum: ${date}";
+
+  static String m5(weeks) => "${weeks} Wochen entfernt";
+
+  static String m6(value) => "Ziel: ${value}";
+
+  static String m7(percent) => "${percent}%";
+
+  static String m8(age) => "${age} Jahre";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -70,10 +80,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "Der Body-Mass-Index (BMI) ist ein Index zur Klassifizierung von Übergewicht und Fettleibigkeit bei Erwachsenen. Er wird berechnet, indem das Gewicht in Kilogramm durch das Quadrat der Körpergröße in Metern (kg/m²) geteilt wird.\n\nDer BMI unterscheidet nicht zwischen Fett- und Muskelmasse und kann für einige Personen irreführend sein.",
     ),
     "bmiLabel": MessageLookupByLibrary.simpleMessage("BMI"),
+    "bodyInfoLabel": MessageLookupByLibrary.simpleMessage("Körperdaten"),
     "breakfastExample": MessageLookupByLibrary.simpleMessage(
       "z. B. Müsli, Milch, Kaffee ...",
     ),
     "breakfastLabel": MessageLookupByLibrary.simpleMessage("Frühstück"),
+    "burnIntensityHighLabel": MessageLookupByLibrary.simpleMessage(
+      "Hoher Verbrauch",
+    ),
+    "burnIntensityLightLabel": MessageLookupByLibrary.simpleMessage(
+      "Leichter Verbrauch",
+    ),
+    "burnIntensityMediumLabel": MessageLookupByLibrary.simpleMessage(
+      "Mittlerer Verbrauch",
+    ),
     "burnedLabel": MessageLookupByLibrary.simpleMessage("verbrannt"),
     "buttonNextLabel": MessageLookupByLibrary.simpleMessage("WEITER"),
     "buttonResetLabel": MessageLookupByLibrary.simpleMessage("Zurücksetzen"),
@@ -170,11 +190,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "disclaimerText": MessageLookupByLibrary.simpleMessage(
       "OpenNutriTracker ist keine medizinische Anwendung. Alle bereitgestellten Daten sind nicht validiert und sollten mit Vorsicht verwendet werden. Bitte pflegen Sie einen gesunden Lebensstil und konsultieren Sie einen Fachmann, wenn Sie Probleme haben. Die Verwendung während einer Krankheit, Schwangerschaft oder Stillzeit wird nicht empfohlen.\n\n\nDie Anwendung befindet sich noch in der Entwicklung. Fehler, Bugs und Abstürze können auftreten.",
     ),
+    "durationLabel": MessageLookupByLibrary.simpleMessage("Dauer"),
     "editItemDialogTitle": MessageLookupByLibrary.simpleMessage(
       "Eintrag aktualisieren",
-    ),
-    "editMealLabel": MessageLookupByLibrary.simpleMessage(
-      "Mahlzeit bearbeiten",
     ),
     "energyLabel": MessageLookupByLibrary.simpleMessage("Energie"),
     "errorFetchingProductData": MessageLookupByLibrary.simpleMessage(
@@ -224,12 +242,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "gramUnit": MessageLookupByLibrary.simpleMessage("g"),
     "heightLabel": MessageLookupByLibrary.simpleMessage("Größe"),
     "homeLabel": MessageLookupByLibrary.simpleMessage("Startseite"),
+    "hoursUnitLabel": MessageLookupByLibrary.simpleMessage("Std."),
     "importAction": MessageLookupByLibrary.simpleMessage("Importieren"),
     "infoAddedActivityLabel": MessageLookupByLibrary.simpleMessage(
       "Neue Aktivität hinzugefügt",
     ),
     "infoAddedIntakeLabel": MessageLookupByLibrary.simpleMessage(
       "Neue Aufnahme hinzugefügt",
+    ),
+    "intensityLabel": MessageLookupByLibrary.simpleMessage("Intensität"),
+    "intensityLightLabel": MessageLookupByLibrary.simpleMessage("Leicht"),
+    "intensityModerateLabel": MessageLookupByLibrary.simpleMessage("Moderat"),
+    "intensityVigorousLabel": MessageLookupByLibrary.simpleMessage("Intensiv"),
+    "invalidInputLabel": MessageLookupByLibrary.simpleMessage(
+      "Bitte geben Sie eine gültige Dauer ein.",
     ),
     "itemDeletedSnackbar": MessageLookupByLibrary.simpleMessage(
       "Eintrag gelöscht",
@@ -267,6 +293,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "mealUnitLabel": MessageLookupByLibrary.simpleMessage("Mahlzeiteinheit"),
     "milliliterUnit": MessageLookupByLibrary.simpleMessage("ml"),
+    "minutesUnitLabel": MessageLookupByLibrary.simpleMessage("Min."),
     "missingProductInfo": MessageLookupByLibrary.simpleMessage(
       "Produkt fehlen die erforderlichen Angaben zu Kalorien oder Makronährstoffen",
     ),
@@ -376,6 +403,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Zieldetails",
     ),
     "onboardingStepOverview": MessageLookupByLibrary.simpleMessage("Dein Plan"),
+    "onboardingStepTargetDate": MessageLookupByLibrary.simpleMessage(
+      "Ziel-Zeitrahmen",
+    ),
     "onboardingTargetWeightValidationGain":
         MessageLookupByLibrary.simpleMessage(
           "Zielgewicht muss über dem aktuellen Gewicht liegen",
@@ -821,6 +851,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectPalCategoryLabel": MessageLookupByLibrary.simpleMessage(
       "Aktivitätslevel auswählen",
     ),
+    "selectTargetWeightDialogLabel": MessageLookupByLibrary.simpleMessage(
+      "Zielgewicht festlegen",
+    ),
     "selectWeightDialogLabel": MessageLookupByLibrary.simpleMessage(
       "Gewicht auswählen",
     ),
@@ -867,6 +900,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "snackLabel": MessageLookupByLibrary.simpleMessage("Snack"),
     "sugarLabel": MessageLookupByLibrary.simpleMessage("Zucker"),
     "suppliedLabel": MessageLookupByLibrary.simpleMessage("zugeführt"),
+    "targetDateHint": MessageLookupByLibrary.simpleMessage(
+      "Wähle dein Zieldatum",
+    ),
+    "targetDateImpliedRate": m3,
+    "targetDateLabel": MessageLookupByLibrary.simpleMessage("Zieldatum"),
+    "targetDateSelectedLabel": m4,
+    "targetDateSkipLabel": MessageLookupByLibrary.simpleMessage("Überspringen"),
+    "targetDateSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Wann möchtest du dein Ziel erreichen?",
+    ),
+    "targetDateValidationPast": MessageLookupByLibrary.simpleMessage(
+      "Das Zieldatum muss in der Zukunft liegen",
+    ),
+    "targetDateValidationTooSoon": MessageLookupByLibrary.simpleMessage(
+      "Plane mindestens 2 Wochen für einen gesunden Plan ein",
+    ),
+    "targetDateWeeksAway": m5,
+    "targetLabel": m6,
     "targetWeightExampleHintKg": MessageLookupByLibrary.simpleMessage(
       "z.B. 65",
     ),
@@ -909,19 +960,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "weightLossRateSubtitle": MessageLookupByLibrary.simpleMessage(
       "Wie schnell möchtest du abnehmen?",
     ),
-    "intensityLabel": MessageLookupByLibrary.simpleMessage("Intensität"),
-    "intensityLightLabel": MessageLookupByLibrary.simpleMessage("Leicht"),
-    "intensityModerateLabel": MessageLookupByLibrary.simpleMessage("Moderat"),
-    "intensityVigorousLabel": MessageLookupByLibrary.simpleMessage("Intensiv"),
-    "invalidInputLabel": MessageLookupByLibrary.simpleMessage(
-      "Bitte geben Sie eine gültige Dauer ein.",
-    ),
-    "minutesUnitLabel": MessageLookupByLibrary.simpleMessage("Min."),
-    "hoursUnitLabel": MessageLookupByLibrary.simpleMessage("Std."),
-    "durationLabel": MessageLookupByLibrary.simpleMessage("Dauer"),
-    "burnIntensityHighLabel": MessageLookupByLibrary.simpleMessage("Hoher Verbrauch"),
-    "burnIntensityMediumLabel": MessageLookupByLibrary.simpleMessage("Mittlerer Verbrauch"),
-    "burnIntensityLightLabel": MessageLookupByLibrary.simpleMessage("Leichter Verbrauch"),
-    "yearsLabel": m3,
+    "weightProgressPercentLabel": m7,
+    "yearsLabel": m8,
   };
 }

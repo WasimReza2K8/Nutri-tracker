@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:opennutritracker/core/domain/entity/user_bmi_entity.dart';
 import 'package:opennutritracker/core/domain/entity/user_entity.dart';
+import 'package:opennutritracker/core/domain/entity/user_weight_goal_entity.dart';
 import 'package:opennutritracker/core/domain/usecase/add_tracked_day_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/add_user_usecase.dart';
 import 'package:opennutritracker/core/domain/usecase/add_config_usecase.dart';
@@ -56,6 +57,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   void updateUser(UserEntity userEntity) async {
+    // Auto-derive goal from target weight vs current weight
+    if (userEntity.targetWeightKG != null) {
+      final diff = userEntity.targetWeightKG! - userEntity.weightKG;
+      if (diff < -0.5) {
+        userEntity.goal = UserWeightGoalEntity.loseWeight;
+      } else if (diff > 0.5) {
+        userEntity.goal = UserWeightGoalEntity.gainWeight;
+      } else {
+        userEntity.goal = UserWeightGoalEntity.maintainWeight;
+      }
+    }
+
     // Update user in DB
     await _addUserUsecase.addUser(userEntity);
 

@@ -27,7 +27,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(riskValue) => "Eşlik eden hastalık riski: ${riskValue}";
 
-  static String m3(age) => "${age} yıl";
+  static String m3(rate) => "~${rate} haftalık";
+
+  static String m4(date) => "Hedef tarih: ${date}";
+
+  static String m5(weeks) => "${weeks} hafta sonra";
+
+  static String m6(value) => "Hedef: ${value}";
+
+  static String m7(percent) => "${percent}%";
+
+  static String m8(age) => "${age} yıl";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -71,10 +81,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "Vücut Kitle İndeksi (BMI), yetişkinlerde aşırı kiloyu ve obeziteyi sınıflandırmak için kullanılan bir indekstir. Kilogram cinsinden ağırlığın, metre cinsinden boyun karesine bölünmesiyle tanımlanır (kg/m²).\n\nBMI, yağ ve kas kütlesi arasında ayrım yapmaz ve bazı bireyler için yanıltıcı olabilir.",
     ),
     "bmiLabel": MessageLookupByLibrary.simpleMessage("BMI"),
+    "bodyInfoLabel": MessageLookupByLibrary.simpleMessage("Vücut Bilgisi"),
     "breakfastExample": MessageLookupByLibrary.simpleMessage(
       "ör. mısır gevreği, süt, kahve ...",
     ),
     "breakfastLabel": MessageLookupByLibrary.simpleMessage("Kahvaltı"),
+    "burnIntensityHighLabel": MessageLookupByLibrary.simpleMessage(
+      "Yüksek Yakım",
+    ),
+    "burnIntensityLightLabel": MessageLookupByLibrary.simpleMessage(
+      "Hafif Yakım",
+    ),
+    "burnIntensityMediumLabel": MessageLookupByLibrary.simpleMessage(
+      "Orta Yakım",
+    ),
     "burnedLabel": MessageLookupByLibrary.simpleMessage("yakılan"),
     "buttonNextLabel": MessageLookupByLibrary.simpleMessage("İLERİ"),
     "buttonResetLabel": MessageLookupByLibrary.simpleMessage("Sıfırla"),
@@ -168,10 +188,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "disclaimerText": MessageLookupByLibrary.simpleMessage(
       "OpenNutriTracker bir tıbbi uygulama değildir. Sağlanan tüm veriler doğrulanmamıştır ve dikkatle kullanılmalıdır. Lütfen sağlıklı bir yaşam tarzı sürdürün ve herhangi bir sorununuz varsa bir profesyonele danışın. Hastalık, hamilelik veya emzirme döneminde kullanımı önerilmez.\n\n\nUygulama hala geliştirme aşamasındadır. Hatalar, aksaklıklar ve çökmeler meydana gelebilir.",
     ),
+    "durationLabel": MessageLookupByLibrary.simpleMessage("Süre"),
     "editItemDialogTitle": MessageLookupByLibrary.simpleMessage(
       "Öğeyi Düzenle",
     ),
-    "editMealLabel": MessageLookupByLibrary.simpleMessage("Yemeği Düzenle"),
+    "editMealLabel": MessageLookupByLibrary.simpleMessage("Öğünü Düzenle"),
     "energyLabel": MessageLookupByLibrary.simpleMessage("enerji"),
     "errorFetchingProductData": MessageLookupByLibrary.simpleMessage(
       "Ürün verileri alınırken hata oluştu",
@@ -219,12 +240,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "gramUnit": MessageLookupByLibrary.simpleMessage("g"),
     "heightLabel": MessageLookupByLibrary.simpleMessage("Boy"),
     "homeLabel": MessageLookupByLibrary.simpleMessage("Ana Sayfa"),
+    "hoursUnitLabel": MessageLookupByLibrary.simpleMessage("st"),
     "importAction": MessageLookupByLibrary.simpleMessage("İçe Aktar"),
     "infoAddedActivityLabel": MessageLookupByLibrary.simpleMessage(
       "Yeni aktivite eklendi",
     ),
     "infoAddedIntakeLabel": MessageLookupByLibrary.simpleMessage(
       "Yeni alım eklendi",
+    ),
+    "intensityLabel": MessageLookupByLibrary.simpleMessage("Yoğunluk"),
+    "intensityLightLabel": MessageLookupByLibrary.simpleMessage("Hafif"),
+    "intensityModerateLabel": MessageLookupByLibrary.simpleMessage("Orta"),
+    "intensityVigorousLabel": MessageLookupByLibrary.simpleMessage("Şiddetli"),
+    "invalidInputLabel": MessageLookupByLibrary.simpleMessage(
+      "Lütfen geçerli bir süre girin.",
     ),
     "itemDeletedSnackbar": MessageLookupByLibrary.simpleMessage("Öğe silindi"),
     "itemUpdatedSnackbar": MessageLookupByLibrary.simpleMessage(
@@ -261,6 +290,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "mealUnitLabel": MessageLookupByLibrary.simpleMessage("Yemek birimi"),
     "milliliterUnit": MessageLookupByLibrary.simpleMessage("ml"),
+    "minutesUnitLabel": MessageLookupByLibrary.simpleMessage("dk"),
     "missingProductInfo": MessageLookupByLibrary.simpleMessage(
       "Üründe gerekli kcal veya makro besin bilgileri eksik",
     ),
@@ -371,6 +401,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Hedef Detayları",
     ),
     "onboardingStepOverview": MessageLookupByLibrary.simpleMessage("Planınız"),
+    "onboardingStepTargetDate": MessageLookupByLibrary.simpleMessage(
+      "Hedef Zaman Çizelgesi",
+    ),
     "onboardingTargetWeightValidationGain":
         MessageLookupByLibrary.simpleMessage(
           "Hedef kilo mevcut kilodan fazla olmalıdır",
@@ -794,6 +827,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectPalCategoryLabel": MessageLookupByLibrary.simpleMessage(
       "Aktivite Seviyesini Seçin",
     ),
+    "selectTargetWeightDialogLabel": MessageLookupByLibrary.simpleMessage(
+      "Hedef Kiloyu Ayarla",
+    ),
     "selectWeightDialogLabel": MessageLookupByLibrary.simpleMessage(
       "Kilo Seçin",
     ),
@@ -851,6 +887,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "snackLabel": MessageLookupByLibrary.simpleMessage("Atıştırmalık"),
     "sugarLabel": MessageLookupByLibrary.simpleMessage("şeker"),
     "suppliedLabel": MessageLookupByLibrary.simpleMessage("tüketilen"),
+    "targetDateHint": MessageLookupByLibrary.simpleMessage(
+      "Hedef tarihinizi seçin",
+    ),
+    "targetDateImpliedRate": m3,
+    "targetDateLabel": MessageLookupByLibrary.simpleMessage("Hedef Tarih"),
+    "targetDateSelectedLabel": m4,
+    "targetDateSkipLabel": MessageLookupByLibrary.simpleMessage("Atla"),
+    "targetDateSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Hedefinize ne zaman ulaşmak istiyorsunuz?",
+    ),
+    "targetDateValidationPast": MessageLookupByLibrary.simpleMessage(
+      "Hedef tarih gelecekte olmalıdır",
+    ),
+    "targetDateValidationTooSoon": MessageLookupByLibrary.simpleMessage(
+      "Sağlıklı bir plan için en az 2 hafta tanıyın",
+    ),
+    "targetDateWeeksAway": m5,
+    "targetLabel": m6,
     "targetWeightExampleHintKg": MessageLookupByLibrary.simpleMessage("ör. 65"),
     "targetWeightExampleHintLbs": MessageLookupByLibrary.simpleMessage(
       "ör. 143",
@@ -891,19 +945,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "weightLossRateSubtitle": MessageLookupByLibrary.simpleMessage(
       "Ne kadar hızlı kilo vermek istiyorsunuz?",
     ),
-    "intensityLabel": MessageLookupByLibrary.simpleMessage("Yoğunluk"),
-    "intensityLightLabel": MessageLookupByLibrary.simpleMessage("Hafif"),
-    "intensityModerateLabel": MessageLookupByLibrary.simpleMessage("Orta"),
-    "intensityVigorousLabel": MessageLookupByLibrary.simpleMessage("Şiddetli"),
-    "invalidInputLabel": MessageLookupByLibrary.simpleMessage(
-      "Lütfen geçerli bir süre girin.",
-    ),
-    "minutesUnitLabel": MessageLookupByLibrary.simpleMessage("dk"),
-    "hoursUnitLabel": MessageLookupByLibrary.simpleMessage("st"),
-    "durationLabel": MessageLookupByLibrary.simpleMessage("Süre"),
-    "burnIntensityHighLabel": MessageLookupByLibrary.simpleMessage("Yüksek Yakım"),
-    "burnIntensityMediumLabel": MessageLookupByLibrary.simpleMessage("Orta Yakım"),
-    "burnIntensityLightLabel": MessageLookupByLibrary.simpleMessage("Hafif Yakım"),
-    "yearsLabel": m3,
+    "weightProgressPercentLabel": m7,
+    "yearsLabel": m8,
   };
 }

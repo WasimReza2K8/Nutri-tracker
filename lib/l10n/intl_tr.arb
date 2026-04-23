@@ -462,5 +462,44 @@
   "calendarFormatMonthLabel": "Ay",
   "calendarFormatWeekLabel": "Hafta",
   "calendarExpandedLabel": "Genişletilmiş",
-  "calendarCollapsedLabel": "Daraltılmış"
+  "calendarCollapsedLabel": "Daraltılmış",
+  "bodyInfoLabel": "Vücut Bilgisi",
+  "targetLabel": "Hedef: {value}",
+  "@targetLabel": {
+    "placeholders": {
+      "value": {"type": "String"}
+    }
+  },
+  "selectTargetWeightDialogLabel": "Hedef Kiloyu Ayarla",
+  "onboardingStepTargetDate": "Hedef Zaman Çizelgesi",
+  "targetDateLabel": "Hedef Tarih",
+  "targetDateSubtitle": "Hedefinize ne zaman ulaşmak istiyorsunuz?",
+  "targetDateHint": "Hedef tarihinizi seçin",
+  "targetDateValidationPast": "Hedef tarih gelecekte olmalıdır",
+  "targetDateValidationTooSoon": "Sağlıklı bir plan için en az 2 hafta tanıyın",
+  "targetDateSelectedLabel": "Hedef tarih: {date}",
+  "@targetDateSelectedLabel": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "targetDateWeeksAway": "{weeks} hafta sonra",
+  "@targetDateWeeksAway": {
+    "placeholders": {
+      "weeks": {"type": "String"}
+    }
+  },
+  "targetDateImpliedRate": "~{rate} haftalık",
+  "@targetDateImpliedRate": {
+    "placeholders": {
+      "rate": {"type": "String"}
+    }
+  },
+  "targetDateSkipLabel": "Atla",
+  "weightProgressPercentLabel": "{percent}%",
+  "@weightProgressPercentLabel": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  }
 }

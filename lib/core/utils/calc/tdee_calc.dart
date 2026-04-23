@@ -46,6 +46,10 @@ class TDEECalc {
     }
   }
 
+  /// Public wrapper for BMR calculation (used by calorie safety limits)
+  static double getBmrMifflinStJeor(UserEntity userEntity) =>
+      _getBMRMifflinStJeor(userEntity);
+
   // ── Legacy methods kept for reference / potential settings toggle ──
 
   /// IOM 2005 EER equation (previous default — tends to over-estimate).

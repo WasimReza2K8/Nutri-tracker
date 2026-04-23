@@ -12,6 +12,7 @@ class UserEntity {
   UserPALEntity pal;
   double? targetWeightKG;
   double? weightChangeRateKgPerWeek;
+  DateTime? targetDateForWeightGoal;
 
   UserEntity(
       {required this.birthday,
@@ -21,7 +22,8 @@ class UserEntity {
       required this.goal,
       required this.pal,
       this.targetWeightKG,
-      this.weightChangeRateKgPerWeek});
+      this.weightChangeRateKgPerWeek,
+      this.targetDateForWeightGoal});
 
   factory UserEntity.fromUserDBO(UserDBO userDBO) {
     return UserEntity(
@@ -32,7 +34,8 @@ class UserEntity {
         goal: UserWeightGoalEntity.fromUserWeightGoalDBO(userDBO.goal),
         pal: UserPALEntity.fromUserPALDBO(userDBO.pal),
         targetWeightKG: userDBO.targetWeightKG,
-        weightChangeRateKgPerWeek: userDBO.weightChangeRateKgPerWeek);
+        weightChangeRateKgPerWeek: userDBO.weightChangeRateKgPerWeek,
+        targetDateForWeightGoal: userDBO.targetDateForWeightGoal);
   }
 
   int get age => DateTime.now().difference(birthday).inDays~/365;

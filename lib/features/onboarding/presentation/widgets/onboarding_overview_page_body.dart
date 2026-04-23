@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:opennutritracker/generated/l10n.dart';
 
 class OnboardingOverviewPageBody extends StatelessWidget {
-  final String calorieGoalDayString;
-  final String carbsGoalString;
-  final String fatGoalString;
-  final String proteinGoalString;
+  final String Function() calorieGoalDayString;
+  final String Function() carbsGoalString;
+  final String Function() fatGoalString;
+  final String Function() proteinGoalString;
   final Function(bool active) setButtonActive;
   final double? totalKcalCalculated;
 
@@ -70,7 +70,7 @@ class OnboardingOverviewPageBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                calorieGoalDayString,
+                calorieGoalDayString(),
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w700,
@@ -112,7 +112,7 @@ class OnboardingOverviewPageBody extends StatelessWidget {
           _buildMacroTile(
             context,
             label: S.of(context).carbsLabel,
-            grams: carbsGoalString,
+            grams: carbsGoalString(),
             color: Colors.orange,
             icon: Icons.grain_rounded,
           ),
@@ -120,7 +120,7 @@ class OnboardingOverviewPageBody extends StatelessWidget {
           _buildMacroTile(
             context,
             label: S.of(context).fatLabel,
-            grams: fatGoalString,
+            grams: fatGoalString(),
             color: Colors.blue,
             icon: Icons.opacity_rounded,
           ),
@@ -128,7 +128,7 @@ class OnboardingOverviewPageBody extends StatelessWidget {
           _buildMacroTile(
             context,
             label: S.of(context).proteinLabel,
-            grams: proteinGoalString,
+            grams: proteinGoalString(),
             color: Colors.green,
             icon: Icons.fitness_center_rounded,
           ),

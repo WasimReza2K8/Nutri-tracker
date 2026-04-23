@@ -1238,6 +1238,101 @@ class S {
     return Intl.message('Unit', name: 'unitLabel', desc: '', args: []);
   }
 
+  /// `Intensity`
+  String get intensityLabel {
+    return Intl.message(
+      'Intensity',
+      name: 'intensityLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light`
+  String get intensityLightLabel {
+    return Intl.message(
+      'Light',
+      name: 'intensityLightLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Moderate`
+  String get intensityModerateLabel {
+    return Intl.message(
+      'Moderate',
+      name: 'intensityModerateLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vigorous`
+  String get intensityVigorousLabel {
+    return Intl.message(
+      'Vigorous',
+      name: 'intensityVigorousLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid duration.`
+  String get invalidInputLabel {
+    return Intl.message(
+      'Please enter a valid duration.',
+      name: 'invalidInputLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `min`
+  String get minutesUnitLabel {
+    return Intl.message('min', name: 'minutesUnitLabel', desc: '', args: []);
+  }
+
+  /// `hr`
+  String get hoursUnitLabel {
+    return Intl.message('hr', name: 'hoursUnitLabel', desc: '', args: []);
+  }
+
+  /// `Duration`
+  String get durationLabel {
+    return Intl.message('Duration', name: 'durationLabel', desc: '', args: []);
+  }
+
+  /// `High Burn`
+  String get burnIntensityHighLabel {
+    return Intl.message(
+      'High Burn',
+      name: 'burnIntensityHighLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Medium Burn`
+  String get burnIntensityMediumLabel {
+    return Intl.message(
+      'Medium Burn',
+      name: 'burnIntensityMediumLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light Burn`
+  String get burnIntensityLightLabel {
+    return Intl.message(
+      'Light Burn',
+      name: 'burnIntensityLightLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Scan Product`
   String get scanProductLabel {
     return Intl.message(
@@ -4033,113 +4128,138 @@ class S {
     );
   }
 
-  /// `Intensity`
-  String get intensityLabel {
+  /// `Body Info`
+  String get bodyInfoLabel {
+    return Intl.message('Body Info', name: 'bodyInfoLabel', desc: '', args: []);
+  }
+
+  /// `Target: {value}`
+  String targetLabel(String value) {
     return Intl.message(
-      'Intensity',
-      name: 'intensityLabel',
+      'Target: $value',
+      name: 'targetLabel',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Set Target Weight`
+  String get selectTargetWeightDialogLabel {
+    return Intl.message(
+      'Set Target Weight',
+      name: 'selectTargetWeightDialogLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Light`
-  String get intensityLightLabel {
+  /// `Target Timeline`
+  String get onboardingStepTargetDate {
     return Intl.message(
-      'Light',
-      name: 'intensityLightLabel',
+      'Target Timeline',
+      name: 'onboardingStepTargetDate',
       desc: '',
       args: [],
     );
   }
 
-  /// `Moderate`
-  String get intensityModerateLabel {
+  /// `Target Date`
+  String get targetDateLabel {
     return Intl.message(
-      'Moderate',
-      name: 'intensityModerateLabel',
+      'Target Date',
+      name: 'targetDateLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `Vigorous`
-  String get intensityVigorousLabel {
+  /// `When do you want to reach your goal?`
+  String get targetDateSubtitle {
     return Intl.message(
-      'Vigorous',
-      name: 'intensityVigorousLabel',
+      'When do you want to reach your goal?',
+      name: 'targetDateSubtitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Please enter a valid duration.`
-  String get invalidInputLabel {
+  /// `Select your target date`
+  String get targetDateHint {
     return Intl.message(
-      'Please enter a valid duration.',
-      name: 'invalidInputLabel',
+      'Select your target date',
+      name: 'targetDateHint',
       desc: '',
       args: [],
     );
   }
 
-  /// `min`
-  String get minutesUnitLabel {
+  /// `Target date must be in the future`
+  String get targetDateValidationPast {
     return Intl.message(
-      'min',
-      name: 'minutesUnitLabel',
+      'Target date must be in the future',
+      name: 'targetDateValidationPast',
       desc: '',
       args: [],
     );
   }
 
-  /// `hr`
-  String get hoursUnitLabel {
+  /// `Allow at least 2 weeks for a healthy plan`
+  String get targetDateValidationTooSoon {
     return Intl.message(
-      'hr',
-      name: 'hoursUnitLabel',
+      'Allow at least 2 weeks for a healthy plan',
+      name: 'targetDateValidationTooSoon',
       desc: '',
       args: [],
     );
   }
 
-  /// `Duration`
-  String get durationLabel {
+  /// `Goal date: {date}`
+  String targetDateSelectedLabel(String date) {
     return Intl.message(
-      'Duration',
-      name: 'durationLabel',
+      'Goal date: $date',
+      name: 'targetDateSelectedLabel',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `{weeks} weeks away`
+  String targetDateWeeksAway(String weeks) {
+    return Intl.message(
+      '$weeks weeks away',
+      name: 'targetDateWeeksAway',
+      desc: '',
+      args: [weeks],
+    );
+  }
+
+  /// `~{rate} per week`
+  String targetDateImpliedRate(String rate) {
+    return Intl.message(
+      '~$rate per week',
+      name: 'targetDateImpliedRate',
+      desc: '',
+      args: [rate],
+    );
+  }
+
+  /// `Skip`
+  String get targetDateSkipLabel {
+    return Intl.message(
+      'Skip',
+      name: 'targetDateSkipLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `High Burn`
-  String get burnIntensityHighLabel {
+  /// `{percent}%`
+  String weightProgressPercentLabel(String percent) {
     return Intl.message(
-      'High Burn',
-      name: 'burnIntensityHighLabel',
+      '$percent%',
+      name: 'weightProgressPercentLabel',
       desc: '',
-      args: [],
-    );
-  }
-
-  /// `Medium Burn`
-  String get burnIntensityMediumLabel {
-    return Intl.message(
-      'Medium Burn',
-      name: 'burnIntensityMediumLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Light Burn`
-  String get burnIntensityLightLabel {
-    return Intl.message(
-      'Light Burn',
-      name: 'burnIntensityLightLabel',
-      desc: '',
-      args: [],
+      args: [percent],
     );
   }
 }

@@ -23,28 +23,27 @@ class ActivityItemCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(16)),
-        child: SizedBox(
-          height: 120,
-          child: Padding(
+        child: Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 56,
-                  height: 56,
+                  width: 52,
+                  height: 52,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(16),
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                   ),
                   child: Icon(physicalActivityEntity.displayIcon,
                       color:
-                          Theme.of(context).colorScheme.onSecondaryContainer),
+                          Theme.of(context).colorScheme.onPrimaryContainer),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       AutoSizeText(
                         physicalActivityEntity.getName(context),
@@ -56,21 +55,21 @@ class ActivityItemCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       AutoSizeText(
                         physicalActivityEntity.getDescription(context),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withValues(alpha: 0.8)),
+                                .withValues(alpha: 0.7)),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
+                            horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color:
                               Theme.of(context).colorScheme.tertiaryContainer,
@@ -84,8 +83,8 @@ class ActivityItemCard extends StatelessWidget {
                                   ? Icons.local_fire_department
                                   : physicalActivityEntity.mets >= 5
                                       ? Icons.local_fire_department_outlined
-                                      : Icons.whatshot_outlined,
-                              size: 14,
+                                      : Icons.directions_walk,
+                              size: 12,
                               color: physicalActivityEntity.mets >= 8
                                   ? Colors.red
                                   : physicalActivityEntity.mets >= 5
@@ -99,7 +98,7 @@ class ActivityItemCard extends StatelessWidget {
                                   : physicalActivityEntity.mets >= 5
                                       ? S.of(context).burnIntensityMediumLabel
                                       : S.of(context).burnIntensityLightLabel,
-                              style: Theme.of(context).textTheme.labelLarge,
+                              style: Theme.of(context).textTheme.labelSmall,
                             ),
                           ],
                         ),
@@ -108,15 +107,17 @@ class ActivityItemCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                FilledButton.tonalIcon(
+                IconButton.filled(
                   onPressed: () => _onItemPressed(context),
                   icon: const Icon(Icons.add),
-                  label: Text(S.of(context).addLabel),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                 ),
               ],
             ),
           ),
-        ),
         onTap: () => _onItemPressed(context),
       ),
     );
